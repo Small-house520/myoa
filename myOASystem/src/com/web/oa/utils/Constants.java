@@ -6,11 +6,11 @@ public interface Constants {
 	 */
 	public static final String GLOBLE_USER_SESSION = "globle_user";
 	/**
-	 * 流程的key
+	 * 请假流程的key
 	 */
-	public static final String Leave_KEY = "LeaveBillProcessTest";
+	public static final String Leave_KEY = "LeaveBillProcess";
 	/**
-	 * 报销的key
+	 * 报销流程的key
 	 */
 	public static final String BAOXIAO_KEY = "baoxiao";
 }

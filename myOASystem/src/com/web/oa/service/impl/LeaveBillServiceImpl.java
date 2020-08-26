@@ -26,4 +26,9 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 		this.leaveBillMapper.deleteByPrimaryKey(id);
 	}
 
+	@Override
+	public Leavebill findLeaveBillById(long id) {
+		return this.leaveBillMapper.selectByPrimaryKey(id);
+	}
+
 }

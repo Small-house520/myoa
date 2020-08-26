@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>审批请假单</title>
+<title>报销任务办理详情</title>
 
 <!-- Bootstrap -->
 <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -23,47 +23,34 @@
 	<!--路径导航-->
 	<ol class="breadcrumb breadcrumb_nav">
 		<li>首页</li>
-		<li>请假管理</li>
-		<li class="active">审批请假单</li>
+		<li>报销管理</li>
+		<li class="active">我的报销单</li>
+
 	</ol>
 	<!--路径导航-->
 
 	<div class="page-content">
 		<div class="panel panel-default">
-			<div class="panel-heading">请假信息</div>
+			<div class="panel-heading">报销任务办理详情</div>
 			<div class="panel-body">
 				<form action="submitTask" method="post">
-				<input type="hidden" name="flag" value=1>
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-md-8">
-								<input type="hidden" name="id" value="${bill.id}" /> <input
-									type="hidden" name="taskId" value="${taskId}" />
-
 								<div class="form-group">
 									<label>标题</label> <input type="text" class="form-control"
 										id="title" readonly="readonly" name="title"
-										value="${bill.content}">
+										value="${baoxiaoBill.title}">
 								</div>
-
 								<div class="form-group">
-									<label for="col_name">天数</label> <input type="text"
-										class="form-control" id="days" name="days"
-										readonly="readonly" value="${bill.days}">
+									<label for="col_name">金额</label> <input type="text"
+										class="form-control" id="money" name="money"
+										readonly="readonly" value="${baoxiaoBill.money}">
 								</div>
-
 								<div class="form-group">
 									<label for="seo_title">申请事由</label>
-									<textarea class="form-control" rows="10" cols="10" id="remark"
-										readonly="readonly" name="remark">${bill.remark}</textarea>
-								</div>
-								<div class="form-group">
-									<label for="seo_title">批注</label>
-									<textarea class="form-control" rows="8" cols="10" id="comment"
-										name="comment"></textarea>
-								</div>
-								<div class="form-group">
-									<input type="submit" class="btn btn-primary" value="提 交" />
+									<textarea class="form-control" rows="5" cols="10" id="remark"
+										readonly="readonly" name="remark">${baoxiaoBill.remark}</textarea>
 								</div>
 							</div>
 						</div>
@@ -72,7 +59,7 @@
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading">请假批注信息列表</div>
+			<div class="panel-heading">报销批注信息列表</div>
 
 			<div class="table-responsive">
 				<c:if test="${fn:length(commentList)>0}">
@@ -106,6 +93,8 @@
 			</div>
 		</div>
 	</div>
+
+
 
 </body>
 </html>

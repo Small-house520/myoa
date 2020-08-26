@@ -30,7 +30,7 @@ public interface WorkFlowService {
 
 	public List<String> findOutComeListByTaskId(String taskId);
 
-	public void saveSubmitTask(long id, String taskId, String comemnt, String outcome, String username);
+	public void saveSubmitTask(long id, String taskId, String comemnt, String outcome, String username, int flag);
 
 	ProcessDefinition findProcessDefinitionByTaskId(String taskId);
 
@@ -55,5 +55,7 @@ public interface WorkFlowService {
 	BaoxiaoBill findBaoxiaoBillListByTaskId(String taskId);
 
 	List<Comment> findCommentListByTaskId(String taskId);
+
+	List<Comment> findCommentByLeaveBillId(long id);
 
 }

@@ -31,7 +31,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">请假申请单</div>
 			<div class="panel-body">
-				<form action="saveStartLeave" method="post">
+				<form action="${path }/saveStartLeave" method="post">
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-md-8">

@@ -79,7 +79,7 @@ th, td {
 										</c:choose> <a
 										href="${pageContext.request.contextPath}/viewCurrentImage?taskId=${task.id}"
 										target="_blank" class="btn btn-success btn-xs"><span
-											class="glyphicon glyphicon-eye-open"></span> 查看当前流程图</a></td>
+											class="glyphicon glyphicon-eye-open"></span> 当前流程图</a></td>
 								</tr>
 							</c:forEach>
 						</tbody>

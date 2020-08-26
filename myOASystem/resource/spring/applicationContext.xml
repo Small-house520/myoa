@@ -50,6 +50,10 @@
 		<tx:attributes>
 			<tx:method name="save*" isolation="DEFAULT" propagation="REQUIRED"
 				read-only="false" />
+			<tx:method name="insert*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="false" />
+			<tx:method name="start*" isolation="DEFAULT" propagation="REQUIRED"
+				read-only="false" />
 			<tx:method name="add*" isolation="DEFAULT" propagation="REQUIRED"
 				read-only="false" />
 			<tx:method name="update*" isolation="DEFAULT" propagation="REQUIRED"

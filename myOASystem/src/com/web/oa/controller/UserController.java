@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -62,28 +61,28 @@ public class UserController {
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request, Model model) {
 
-		// 获取cookie
-		Cookie[] cookies = request.getCookies();
-		// 如果cookie不为空
-		if (cookies != null && cookies.length > 0) {
-			String username = null;
-			String password = null;
-			// 取出cookie中存储的用户名和密码
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("username")) {
-					username = cookie.getValue();
-				}
-				if (cookie.getName().equals("password")) {
-					password = cookie.getValue();
-				}
-			}
-			// 用map接收用户名和密码
-			Map<String, String> map = new HashMap<>();
-			map.put("username", username);
-			map.put("password", password);
-			// 把map设置到model
-			model.addAllAttributes(map);
-		}
+		// // 获取cookie
+		// Cookie[] cookies = request.getCookies();
+		// // 如果cookie不为空
+		// if (cookies != null && cookies.length > 0) {
+		// String username = null;
+		// String password = null;
+		// // 取出cookie中存储的用户名和密码
+		// for (Cookie cookie : cookies) {
+		// if (cookie.getName().equals("username")) {
+		// username = cookie.getValue();
+		// }
+		// if (cookie.getName().equals("password")) {
+		// password = cookie.getValue();
+		// }
+		// }
+		// // 用map接收用户名和密码
+		// Map<String, String> map = new HashMap<>();
+		// map.put("username", username);
+		// map.put("password", password);
+		// // 把map设置到model
+		// model.addAllAttributes(map);
+		// }
 
 		// 如果登陆失败从request中获取认证异常信息，shiroLoginFailure就是shiro异常类的全限定名
 		String exceptionName = (String) request.getAttribute("shiroLoginFailure");

@@ -32,7 +32,7 @@ public class LeaveBillController {
 	}
 
 	// 查询出请假单
-	@RequestMapping(value = "/myLeaveBill")
+	@RequestMapping("/myLeaveBill")
 	public String findBaoxiaoBill(HttpSession session, Model model) {
 		// 获取ActiveUser中的员工id
 		long id = ((ActiveUser) SecurityUtils.getSubject().getPrincipal()).getId();

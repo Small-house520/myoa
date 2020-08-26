@@ -61,8 +61,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 			ZipInputStream zipInputStream = new ZipInputStream(in);
 			repositoryService.createDeployment()// 创建部署对象
 					.name(filename)// 添加部署名称
-					.addZipInputStream(zipInputStream)//
-					.deploy();// 完成部署
+					.addZipInputStream(zipInputStream).deploy();// 完成部署
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -169,7 +168,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 	}
 
 	@Override
-	public void saveSubmitTask(long id, String taskId, String comment, String outcome, String username) {
+	public void saveSubmitTask(long id, String taskId, String comment, String outcome, String username, int flag) {
 		/**
 		 * 1：在完成之前，添加一个批注信息，向act_hi_comment表中添加数据，用于记录对当前申请人的一些审核信息
 		 */
@@ -193,26 +192,43 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		 * 2：如果连线的名称是“默认提交”，那么就不需要设置，如果不是，就需要设置流程变量 在完成任务之前，设置流程变量，按照连线的名称，去完成任务
 		 * 流程变量的名称：outcome 流程变量的值：连线的名称
 		 */
-		Map<String, Object> variables = new HashMap<String, Object>();
-		if (outcome != null && !outcome.equals("默认提交")) {
-			variables.put("message", outcome);
-			// 3：使用任务ID，完成当前人的个人任务，同时流程变量
-			taskService.complete(taskId, variables);
-		} else {
+
+		if (flag == 1) {
+			// 完成任务
 			taskService.complete(taskId);
-		}
-		/**
-		 * 5：在完成任务之后，判断流程是否结束 如果流程结束了，更新请假单表的状态从1变成2（审核中-->审核完成）
-		 */
-		ProcessInstance pi = runtimeService.createProcessInstanceQuery()//
-				.processInstanceId(processInstanceId)// 使用流程实例ID查询
-				.singleResult();
-		// 流程结束了
-		if (pi == null) {
-			// 更新请假单表的状态从1变成2（审核中-->审核完成）
-			BaoxiaoBill bill = baoxiaoBillMapper.selectByPrimaryKey(id);
-			bill.setState(2);
-			baoxiaoBillMapper.updateByPrimaryKey(bill);
+
+			// 获取流程实例
+			ProcessInstance processInstance = this.runtimeService.createProcessInstanceQuery()
+					.processInstanceId(processInstanceId)// 使用流程实例ID查询
+					.singleResult();
+
+			if (processInstance == null) {
+				Leavebill leavebill = leavebillMapper.selectByPrimaryKey(id);
+				leavebill.setState(2);
+				leavebillMapper.updateByPrimaryKey(leavebill);
+			}
+		} else if (flag == 2) {
+			Map<String, Object> variables = new HashMap<String, Object>();
+			if (outcome != null && !outcome.equals("默认提交")) {
+				variables.put("message", outcome);
+				// 3：使用任务ID，完成当前人的个人任务，同时流程变量
+				taskService.complete(taskId, variables);
+			} else {
+				taskService.complete(taskId);
+			}
+			/**
+			 * 5：在完成任务之后，判断流程是否结束 如果流程结束了，更新请假单表的状态从1变成2（审核中-->审核完成）
+			 */
+			ProcessInstance pi = runtimeService.createProcessInstanceQuery()//
+					.processInstanceId(processInstanceId)// 使用流程实例ID查询
+					.singleResult();
+			// 流程结束了
+			if (pi == null) {
+				// 更新请假单表的状态从1变成2（审核中-->审核完成）
+				BaoxiaoBill bill = baoxiaoBillMapper.selectByPrimaryKey(id);
+				bill.setState(2);
+				baoxiaoBillMapper.updateByPrimaryKey(bill);
+			}
 		}
 
 	}
@@ -316,9 +332,9 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 	// 根据待办人名称查询任务
 	@Override
 	public List<Task> findTaskListByName(String name, int flag) {
-		String procDeResName = "baoxiaoprocess";
+		String procDeResName = Constants.BAOXIAO_KEY;
 		if (flag == 1) {
-			procDeResName = "LeaveBillProcessTest";
+			procDeResName = Constants.Leave_KEY;
 		}
 		ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery()
 				.processDefinitionResourceNameLike("%" + procDeResName + "%").singleResult();
@@ -391,6 +407,17 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		List<Comment> list = this.taskService.getProcessInstanceComments(task.getProcessInstanceId());
 
 		return list;
+	}
+
+	// 根据请假单ID查询历史批注
+	@Override
+	public List<Comment> findCommentByLeaveBillId(long id) {
+		String bussiness_key = Constants.Leave_KEY + "." + id;
+		HistoricProcessInstance pi = this.historyService.createHistoricProcessInstanceQuery()
+				.processInstanceBusinessKey(bussiness_key).singleResult();
+		List<Comment> commentList = this.taskService.getProcessInstanceComments(pi.getId());
+
+		return commentList;
 	}
 
 }

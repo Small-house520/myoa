@@ -62,8 +62,14 @@ public class BaoxiaoBillController {
 	}
 
 	@RequestMapping("/viewCurrentImageByBill")
-	public String viewCurrentImageByBill(long billId, ModelMap model) {
-		String BUSSINESS_KEY = Constants.BAOXIAO_KEY + "." + billId;
+	public String viewCurrentImageByBill(long billId, int flag, ModelMap model) {
+		String BUSSINESS_KEY = null;
+		if (flag == 1) {
+			BUSSINESS_KEY = Constants.Leave_KEY + "." + billId;
+		} else if (flag == 2) {
+			BUSSINESS_KEY = Constants.BAOXIAO_KEY + "." + billId;
+		}
+
 		Task task = this.workFlowService.findTaskByBussinessKey(BUSSINESS_KEY);
 		/** 一：查看流程图 */
 		// 1：获取任务ID，获取任务对象，使用任务对象获取流程定义ID，查询流程定义对象

@@ -64,47 +64,46 @@ th, td {
 						</thead>
 						<tbody>
 							<c:forEach var="leavebill" items="${leavebills}">
-								<tr>
-									<td>${leavebill.id}</td>
-									<td>${leavebill.content}</td>
-									<td>${leavebill.remark}</td>
-									<td><fmt:formatDate value="${leavebill.leavedate}"
-											pattern="yyyy-MM-dd hh:mm:ss" /></td>
-									<td>${leavebill.days}</td>
-									<c:choose>
-										<c:when test="${leavebill.state==1}">
+								<c:if test="${leavebill.state!=0 }">
+									<tr>
+										<td>${leavebill.id}</td>
+										<td>${leavebill.content}</td>
+										<td>${leavebill.remark}</td>
+										<td><fmt:formatDate value="${leavebill.leavedate}"
+												pattern="yyyy-MM-dd hh:mm:ss" /></td>
+										<td>${leavebill.days}</td>
+										<c:if test="${leavebill.state==0}">
+											<td>未申请</td>
+										</c:if>
+										<c:if test="${leavebill.state==1}">
 											<td>审核中</td>
-										</c:when>
-										<c:otherwise>
+										</c:if>
+										<c:if test="${leavebill.state==2}">
 											<td>已完成</td>
-										</c:otherwise>
-									</c:choose>
+										</c:if>
 
-									<td><c:if test="${leavebill.state==0}">
+										<td><c:if test="${leavebill.state==1}">
+												<a
+													href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}&flag=1"
+													class="btn btn-success btn-xs"><span
+													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>&nbsp;&nbsp;
 											<a
-												href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}"
-												class="btn btn-success btn-xs"><span
-												class="glyphicon glyphicon-plus"></span> 办理事务</a>
-										</c:if> <c:if test="${leavebill.state==1}">
-											<a
-												href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}"
-												class="btn btn-success btn-xs"><span
-												class="glyphicon glyphicon-eye-open"></span> 查看审核记录</a>
-											<a
-												href="${pageContext.request.contextPath}/viewCurrentImageByBill?billId=${leavebill.id}"
-												target="_blank" class="btn btn-success btn-xs"><span
-												class="glyphicon glyphicon-eye-open"></span> 查看当前流程图</a>
-										</c:if> <c:if test="${leavebill.state==2}">
+													href="${pageContext.request.contextPath}/viewCurrentImageByBill?billId=${leavebill.id}&flag=1"
+													target="_blank" class="btn btn-success btn-xs"><span
+													class="glyphicon glyphicon-eye-open"></span> 当前流程图</a>
+											</c:if> <c:if test="${leavebill.state==2}">
+												<a
+													href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}&flag=1"
+													class="btn btn-success btn-xs"><span
+													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>&nbsp;&nbsp;
 											<a href="#" onclick="delConf(${leavebill.id})"
-												class="btn btn-danger btn-xs"><span
-												class="glyphicon glyphicon-remove"></span> 删除</a>
-											<a
-												href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}"
-												class="btn btn-success btn-xs"><span
-												class="glyphicon glyphicon-eye-open"></span> 查看审核记录</a>
-										</c:if></td>
+													class="btn btn-danger btn-xs"><span
+													class="glyphicon glyphicon-remove"></span> 删除</a>
+											</c:if></td>
 
-								</tr>
+									</tr>
+								</c:if>
+
 							</c:forEach>
 						</tbody>
 					</table>

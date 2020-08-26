@@ -56,7 +56,7 @@ public class WorkFlowController {
 	}
 
 	// 保存请假信息，开启请假流程
-	@RequestMapping(value = "/saveStartLeave")
+	@RequestMapping("/saveStartLeave")
 	public String saveStartLeave(Leavebill leaveBill, HttpSession session) {
 
 		/**
@@ -136,12 +136,12 @@ public class WorkFlowController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String uri = "";
 		if (flag == 1) {
-			uri = "approve_leave";
+			uri = "jsp/approve_leave";
 			// 获取请假单信息
 			Leavebill leavebill = this.workFlowService.findLeaveBillListByTaskId(taskId);
 			map.put("bill", leavebill);
 		} else {
-			uri = "approve_baoxiao";
+			uri = "jsp/approve_baoxiao";
 			// 获取报销单信息
 			BaoxiaoBill baoxiaobill = this.workFlowService.findBaoxiaoBillListByTaskId(taskId);
 			map.put("baoxiaoBill", baoxiaobill);
@@ -161,12 +161,12 @@ public class WorkFlowController {
 
 	// 办理任务
 	@RequestMapping("/submitTask")
-	public String submitTask(long id, String taskId, String comment, String outcome, HttpSession session) {
+	public String submitTask(long id, String taskId, String comment, String outcome, Integer flag) {
 		// 获取员工信息
 		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
 		String username = activeUser.getUsername();
 		// 添加批注，且流程需要往前面推进
-		this.workFlowService.saveSubmitTask(id, taskId, comment, outcome, username);
+		this.workFlowService.saveSubmitTask(id, taskId, comment, outcome, username, flag);
 		return "redirect:/myTaskList";
 	}
 
@@ -228,15 +228,29 @@ public class WorkFlowController {
 
 	// 查看历史的批注信息
 	@RequestMapping("/viewHisComment")
-	public String viewHisComment(long id, ModelMap model) {
-		// 1：使用报销单ID，查询报销单对象
-		BaoxiaoBill bill = baoxiaoService.findBaoxiaoBillById(id);
-		model.addAttribute("baoxiaoBill", bill);
-		// 2：使用请假单ID，查询历史的批注信息
-		List<Comment> commentList = workFlowService.findCommentByBaoxiaoBillId(id);
+	public String viewHisComment(long id, int flag, ModelMap model) {
+
+		List<Comment> commentList = null;
+		String uri = "";
+		if (flag == 1) {
+			uri = "jsp/leave_commentlist";
+			// 1：使用请假单ID，查询请假单对象
+			Leavebill bill = leaveBillService.findLeaveBillById(id);
+			model.addAttribute("leaveBill", bill);
+			// 2：使用请假单ID，查询历史的批注信息
+			commentList = workFlowService.findCommentByLeaveBillId(id);
+		} else if (flag == 2) {
+			uri = "jsp/baoxiao_commentlist";
+			// 1：使用报销单ID，查询报销单对象
+			BaoxiaoBill bill = baoxiaoService.findBaoxiaoBillById(id);
+			model.addAttribute("baoxiaoBill", bill);
+			// 2：使用报销单ID，查询历史的批注信息
+			commentList = workFlowService.findCommentByBaoxiaoBillId(id);
+		}
+		model.addAttribute("flag", flag);
 		model.addAttribute("commentList", commentList);
 
-		return "jsp/workflow_commentlist";
+		return uri;
 	}
 
 	/**

@@ -63,37 +63,40 @@ th, td {
 						</thead>
 						<tbody>
 							<c:forEach var="bill" items="${baoxiaoList}">
-								<tr>
-									<td>${bill.id}</td>
-									<td>${bill.title}</td>
-									<td>${bill.remark}</td>
-									<td>${bill.money}</td>
-									<td><fmt:formatDate value="${bill.creatdate}"
-											pattern="yyyy-MM-dd HH:mm:ss" /></td>
-									<td><c:if test="${bill.state==1}">
+								<c:if test="${bill.state!=0 }">
+									<tr>
+										<td>${bill.id}</td>
+										<td>${bill.title}</td>
+										<td>${bill.remark}</td>
+										<td>${bill.money}</td>
+										<td><fmt:formatDate value="${bill.creatdate}"
+												pattern="yyyy-MM-dd HH:mm:ss" /></td>
+										<td><c:if test="${bill.state==1}">
 				        	   		审核中
 				        	   </c:if> <c:if test="${bill.state==2}">
 				        	  		审核完成
 				        	   </c:if></td>
-									<td><c:if test="${bill.state==1}">
-											<a
-												href="${pageContext.request.contextPath }/viewHisComment?id=${bill.id}"
-												class="btn btn-success btn-xs"><span
-												class="glyphicon glyphicon-eye-open"></span> 查看审核记录</a>
-											<a
-												href="${pageContext.request.contextPath}/viewCurrentImageByBill?billId=${bill.id}"
-												target="_blank" class="btn btn-success btn-xs"><span
-												class="glyphicon glyphicon-eye-open"></span> 查看当前流程图</a>
-										</c:if> <c:if test="${bill.state==2}">
-											<a href="#" onclick="delConf(${bill.id})"
-												class="btn btn-danger btn-xs"><span
-												class="glyphicon glyphicon-remove"></span> 删除</a>
-											<a
-												href="${pageContext.request.contextPath }/viewHisComment?id=${bill.id}"
-												class="btn btn-success btn-xs"><span
-												class="glyphicon glyphicon-eye-open"></span> 查看审核记录</a>
-										</c:if></td>
-								</tr>
+										<td><c:if test="${bill.state==1}">
+												<a
+													href="${pageContext.request.contextPath }/viewHisComment?id=${bill.id}&flag=2"
+													class="btn btn-success btn-xs"><span
+													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>
+												<a
+													href="${pageContext.request.contextPath}/viewCurrentImageByBill?billId=${bill.id}&flag=2"
+													target="_blank" class="btn btn-success btn-xs"><span
+													class="glyphicon glyphicon-eye-open"></span> 当前流程图</a>
+											</c:if> <c:if test="${bill.state==2}">
+												<a
+													href="${pageContext.request.contextPath }/viewHisComment?id=${bill.id}&flag=2"
+													class="btn btn-success btn-xs"><span
+													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>
+												<a href="#" onclick="delConf(${bill.id})"
+													class="btn btn-danger btn-xs"><span
+													class="glyphicon glyphicon-remove"></span> 删除</a>
+											</c:if></td>
+									</tr>
+								</c:if>
+
 							</c:forEach>
 						</tbody>
 					</table>

@@ -34,6 +34,7 @@
 			<div class="panel-heading">报销申请单</div>
 			<div class="panel-body">
 				<form action="submitTask" method="post">
+				<input type="hidden" name="flag" value=2>
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-md-8">
