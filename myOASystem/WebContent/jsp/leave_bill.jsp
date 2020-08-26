@@ -25,7 +25,7 @@ th, td {
 <script type="text/javascript">
 	//确认删除函数
 	function delConf(id) {
-		if (confirm("请确定是否删除该条请假记录")) {
+		if (confirm("是否删除该条请假记录")) {
 			window.location.href = "${pageContext.request.contextPath}/leavebilldel?id="
 					+ id;
 		}
@@ -52,18 +52,20 @@ th, td {
 						style="table-layout: fixed;">
 						<thead>
 							<tr>
-								<th width="15%">请假标题</th>
-								<th width="25%"
+								<th width="8%">ID</th>
+								<th width="12%">请假标题</th>
+								<th width="20%"
 									style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">请假事由</th>
 								<th width="15%">申请时间</th>
-								<th width="15%">请假天数</th>
-								<th width="15%">请假状态</th>
-								<th width="15%">操作</th>
+								<th width="10%">请假天数</th>
+								<th width="10%">请假状态</th>
+								<th width="25%">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach var="leavebill" items="${leavebills}">
 								<tr>
+									<td>${leavebill.id}</td>
 									<td>${leavebill.content}</td>
 									<td>${leavebill.remark}</td>
 									<td><fmt:formatDate value="${leavebill.leavedate}"
@@ -78,9 +80,30 @@ th, td {
 										</c:otherwise>
 									</c:choose>
 
-									<td><a href="#" onclick="delConf(${leavebill.id})"
-										class="btn btn-danger btn-xs"><span
-											class="glyphicon glyphicon-trash"></span> 删 除</a></td>
+									<td><c:if test="${leavebill.state==0}">
+											<a
+												href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}"
+												class="btn btn-success btn-xs"><span
+												class="glyphicon glyphicon-plus"></span> 办理事务</a>
+										</c:if> <c:if test="${leavebill.state==1}">
+											<a
+												href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}"
+												class="btn btn-success btn-xs"><span
+												class="glyphicon glyphicon-eye-open"></span> 查看审核记录</a>
+											<a
+												href="${pageContext.request.contextPath}/viewCurrentImageByBill?billId=${leavebill.id}"
+												target="_blank" class="btn btn-success btn-xs"><span
+												class="glyphicon glyphicon-eye-open"></span> 查看当前流程图</a>
+										</c:if> <c:if test="${leavebill.state==2}">
+											<a href="#" onclick="delConf(${leavebill.id})"
+												class="btn btn-danger btn-xs"><span
+												class="glyphicon glyphicon-remove"></span> 删除</a>
+											<a
+												href="${pageContext.request.contextPath }/viewHisComment?id=${leavebill.id}"
+												class="btn btn-success btn-xs"><span
+												class="glyphicon glyphicon-eye-open"></span> 查看审核记录</a>
+										</c:if></td>
+
 								</tr>
 							</c:forEach>
 						</tbody>

@@ -54,11 +54,6 @@
 										class="form-control" id="email" name="email" required
 										value="${employee.email }">
 								</div>
-								<div class="form-group">
-									<label for="seo_title">身份</label> <input type="text"
-										class="form-control" id="role" name="role" required
-										value="${employee.role }">
-								</div>
 
 								<div class="form-group">
 									<label for="seo_title">上司</label><br> <select

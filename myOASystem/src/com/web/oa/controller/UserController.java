@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,6 @@ import com.web.oa.pojo.SysPermission;
 import com.web.oa.pojo.SysRole;
 import com.web.oa.service.EmployeeService;
 import com.web.oa.service.SysService;
-import com.web.oa.utils.Constants;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
@@ -242,32 +242,39 @@ public class UserController {
 		List<Employee> employees = this.employeeService.findEmployeeList();
 		model.addAttribute("employees", employees);
 
-		return "employeeadd";
+		return "jsp/employeeadd";
 	}
 
 	// 添加员工
 	@RequestMapping(value = "/saveEmployee")
 	public String saveEmployee(Employee employee) {
+		// 对密码进行md5加密处理
+		String salt = "eteokues";
+		Md5Hash md5Hash = new Md5Hash(employee.getPassword(), salt, 2);
+		employee.setPassword(md5Hash.toString());
+		employee.setSalt(salt);
+
 		this.employeeService.saveEmployee(employee);
-		return "redirect:/employee";
+		return "redirect:/employeelist";
 	}
 
 	// 删除员工信息
 	@RequestMapping(value = "/employeedelete")
 	public String employeedelete(Long id) {
 		this.employeeService.deleteEmployee(id);
-		return "redirect:/employee";
+		return "redirect:/employeelist";
 	}
 
 	// 跳转到修改员工页面
 	@RequestMapping(value = "/employeeedit")
 	public String employeeedit(Long id, Model model, HttpSession session) {
-		Employee employee = null;
+		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+
 		// 获取要修改员工的信息
 		if (id == 0) {
-			id = ((Employee) session.getAttribute(Constants.GLOBLE_USER_SESSION)).getId();
+			id = activeUser.getId();
 		}
-		employee = this.employeeService.findEmployee(id);
+		Employee employee = this.employeeService.findEmployee(id);
 
 		List<Employee> employees = this.employeeService.findEmployeeList();
 
@@ -277,14 +284,22 @@ public class UserController {
 		map.put("employees", employees);
 		model.addAllAttributes(map);
 
-		return "employeeedit";
+		return "jsp/employeeedit";
 	}
 
 	// 修改员工信息
 	@RequestMapping(value = "/updateEmployee")
 	public String updateEmployee(Employee employee) {
 		this.employeeService.updateEmployee(employee);
-		return "redirect:/employee";
+		return "redirect:/employeelist";
+	}
+
+	// 查询员工信息
+	@RequestMapping(value = "/employeelist")
+	public String findEmployeeList(Model model) {
+		List<Employee> employees = this.employeeService.findEmployeeList();
+		model.addAttribute("employees", employees);
+		return "jsp/employeelist";
 	}
 
 }

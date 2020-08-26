@@ -26,12 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.web.oa.pojo.ActiveUser;
 import com.web.oa.pojo.BaoxiaoBill;
-import com.web.oa.pojo.Employee;
 import com.web.oa.pojo.Leavebill;
 import com.web.oa.service.BaoxiaoService;
 import com.web.oa.service.LeaveBillService;
 import com.web.oa.service.WorkFlowService;
-import com.web.oa.utils.Constants;
 
 @Controller
 public class WorkFlowController {
@@ -77,9 +75,11 @@ public class WorkFlowController {
 		leaveBill.setState(1);
 
 		// 获取session中的employee
-		Employee employee = (Employee) session.getAttribute(Constants.GLOBLE_USER_SESSION);
+		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+		// Employee employee = (Employee)
+		// session.getAttribute(Constants.GLOBLE_USER_SESSION);
 
-		leaveBill.setUserId(employee.getId());
+		leaveBill.setUserId(activeUser.getId());
 
 		// 保存请假单
 		this.leaveBillService.saveLeaveBill(leaveBill);
@@ -87,7 +87,7 @@ public class WorkFlowController {
 		// 启动流程(待办人)
 
 		// this.workFlowService.startProcess(employee.getName());
-		this.workFlowService.startProcess2(leaveBill.getId(), employee.getName());
+		this.workFlowService.startProcess2(leaveBill.getId(), activeUser.getUsername());
 
 		return "redirect:/taskList";
 	}
@@ -116,9 +116,11 @@ public class WorkFlowController {
 		ModelAndView mv = new ModelAndView();
 
 		// 获取session中的employee
-		Employee employee = (Employee) session.getAttribute(Constants.GLOBLE_USER_SESSION);
+		// Employee employee = (Employee)
+		// session.getAttribute(Constants.GLOBLE_USER_SESSION);
+		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
 		// 根据待办人查询任务
-		List<Task> list = this.workFlowService.findTaskListByName(employee.getName(), flag);
+		List<Task> list = this.workFlowService.findTaskListByName(activeUser.getUsername(), flag);
 
 		// 将查询到的list 保存model域中
 		mv.addObject("taskList", list);

@@ -53,10 +53,6 @@
 										class="form-control" id="email" name="email"
 										required placeholder="请输入邮箱">
 								</div>
-								<div class="form-group">
-									<label for="seo_title">身份</label> <input type="text" class="form-control" id="role" name="role"
-										required placeholder="请输入身份">
-								</div>
 
 								<div class="form-group">
 									<label for="seo_title">上司</label><br> <select class="span3"
