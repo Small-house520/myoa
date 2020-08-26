@@ -41,4 +41,6 @@ public interface SysService {
 	public void updateRoleAndPermissions(String roleId, int[] permissionIds);
 
 	public List<SysRole> findRolesAndPermissions();
+
+	public void deleteRole(String id);
 }

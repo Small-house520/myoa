@@ -24,7 +24,7 @@
 	<!--路径导航-->
 
 	<div class="page-content">
-		<div class="panel-heading">${param.name }欢迎回来！</div>
+		<div class="panel-heading" style="font-size: 18px;"><span style="color: #1E90FF;">${param.name }</span>，欢迎回来！</div>
 	</div>
 
 

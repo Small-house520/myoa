@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -20,14 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.web.oa.pojo.ActiveUser;
 import com.web.oa.pojo.Employee;
 import com.web.oa.pojo.EmployeeCustom;
-import com.web.oa.pojo.MenuTree;
-import com.web.oa.pojo.SysPermission;
 import com.web.oa.pojo.SysRole;
 import com.web.oa.service.EmployeeService;
 import com.web.oa.service.SysService;
@@ -44,7 +40,7 @@ public class UserController {
 	private SysService sysService;
 
 	// 生成验证码
-	@RequestMapping(value = "/checkcode")
+	@RequestMapping("/checkcode")
 	public void checkcode(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 定义图形验证码的长、宽、验证码字符数、干扰线宽度
 		ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(112, 40, 4, 3);
@@ -126,118 +122,8 @@ public class UserController {
 		return mv;
 	}
 
-	@RequestMapping("/assignRole")
-	@ResponseBody
-	public Map<String, String> assignRole(String roleId, String userId) {
-		Map<String, String> map = new HashMap<>();
-		try {
-			employeeService.updateEmployeeRole(roleId, userId);
-			map.put("msg", "分配权限成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			map.put("msg", "分配权限失败");
-		}
-		return map;
-	}
-
-	@RequestMapping("/toAddRole")
-	public ModelAndView toAddRole() {
-		List<MenuTree> allPermissions = sysService.loadMenuTree();
-		List<SysPermission> menus = sysService.findAllMenus();
-		List<SysRole> permissionList = sysService.findRolesAndPermissions();
-
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("allPermissions", allPermissions);
-		mv.addObject("menuTypes", menus);
-		mv.addObject("roleAndPermissionsList", permissionList);
-		mv.setViewName("jsp/rolelist");
-
-		return mv;
-
-	}
-
-	@RequestMapping("/saveRoleAndPermissions")
-	public String saveRoleAndPermissions(SysRole role, int[] permissionIds) {
-		// 设置role主键，使用uuid
-		String uuid = UUID.randomUUID().toString();
-		role.setId(uuid);
-		// 默认可用
-		role.setAvailable("1");
-
-		sysService.addRoleAndPermissions(role, permissionIds);
-
-		return "redirect:/toAddRole";
-	}
-
-	@RequestMapping("/saveSubmitPermission")
-	public String saveSubmitPermission(SysPermission permission) {
-		if (permission.getAvailable() == null) {
-			permission.setAvailable("0");
-		}
-		sysService.addSysPermission(permission);
-		return "redirect:/toAddRole";
-	}
-
-	@RequestMapping("/findRoles") // rest
-	public ModelAndView findRoles() {
-		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
-		List<SysRole> roles = sysService.findAllRoles();
-		List<MenuTree> allMenuAndPermissions = sysService.getAllMenuAndPermision();
-
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("allRoles", roles);
-		mv.addObject("activeUser", activeUser);
-		mv.addObject("allMenuAndPermissions", allMenuAndPermissions);
-
-		mv.setViewName("jsp/permissionlist");
-		return mv;
-	}
-
-	@RequestMapping("/loadMyPermissions")
-	@ResponseBody
-	public List<SysPermission> loadMyPermissions(String roleId) {
-		List<SysPermission> list = sysService.findPermissionsByRoleId(roleId);
-
-		for (SysPermission sysPermission : list) {
-			System.out.println(sysPermission.getId() + "," + sysPermission.getType() + "\n" + sysPermission.getName()
-					+ "," + sysPermission.getUrl() + "," + sysPermission.getPercode());
-		}
-		return list;
-	}
-
-	@RequestMapping("/updateRoleAndPermission")
-	public String updateRoleAndPermission(String roleId, int[] permissionIds) {
-		sysService.updateRoleAndPermissions(roleId, permissionIds);
-		return "redirect:/findRoles";
-	}
-
-	@RequestMapping("/viewPermissionByUser")
-	@ResponseBody
-	public SysRole viewPermissionByUser(String userName) {
-		SysRole sysRole = sysService.findRolesAndPermissionsByUserId(userName);
-
-		System.out.println(sysRole.getName() + "," + sysRole.getPermissionList());
-		return sysRole;
-	}
-
-	@RequestMapping("/saveUser")
-	public String saveUser(Employee user) {
-
-		return null;
-	}
-
-	@RequestMapping("/findNextManager")
-	@ResponseBody
-	public List<Employee> findNextManager(int level) {
-		level++; // 加一，表示下一个级别
-		List<Employee> list = employeeService.findEmployeeByLevel(level);
-		System.out.println(list);
-		return list;
-
-	}
-
 	// 跳转到添加员工页面
-	@RequestMapping(value = "/employeeadd")
+	@RequestMapping("/employeeadd")
 	public String employeeadd(Model model) {
 		List<Employee> employees = this.employeeService.findEmployeeList();
 		model.addAttribute("employees", employees);
@@ -246,7 +132,7 @@ public class UserController {
 	}
 
 	// 添加员工
-	@RequestMapping(value = "/saveEmployee")
+	@RequestMapping("/saveEmployee")
 	public String saveEmployee(Employee employee) {
 		// 对密码进行md5加密处理
 		String salt = "eteokues";
@@ -259,14 +145,14 @@ public class UserController {
 	}
 
 	// 删除员工信息
-	@RequestMapping(value = "/employeedelete")
+	@RequestMapping("/employeedelete")
 	public String employeedelete(Long id) {
 		this.employeeService.deleteEmployee(id);
 		return "redirect:/employeelist";
 	}
 
 	// 跳转到修改员工页面
-	@RequestMapping(value = "/employeeedit")
+	@RequestMapping("/employeeedit")
 	public String employeeedit(Long id, Model model, HttpSession session) {
 		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
 
@@ -288,14 +174,14 @@ public class UserController {
 	}
 
 	// 修改员工信息
-	@RequestMapping(value = "/updateEmployee")
+	@RequestMapping("/updateEmployee")
 	public String updateEmployee(Employee employee) {
 		this.employeeService.updateEmployee(employee);
 		return "redirect:/employeelist";
 	}
 
 	// 查询员工信息
-	@RequestMapping(value = "/employeelist")
+	@RequestMapping("/employeelist")
 	public String findEmployeeList(Model model) {
 		List<Employee> employees = this.employeeService.findEmployeeList();
 		model.addAttribute("employees", employees);

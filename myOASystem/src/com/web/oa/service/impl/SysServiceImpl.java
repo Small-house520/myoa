@@ -126,4 +126,10 @@ public class SysServiceImpl implements SysService {
 		return sysPermissionMapperCustom.findRoleAndPermissionList();
 	}
 
+	// 根据id删除角色
+	@Override
+	public void deleteRole(String id) {
+		this.roleMapper.deleteByPrimaryKey(id);
+	}
+
 }

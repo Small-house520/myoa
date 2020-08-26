@@ -47,13 +47,29 @@
 				/js/**=anon
 				/static/**=anon
 				/checkcode=anon
+				
+				<!-- 用户权限 -->
+				/findUserList=perms[user:query]
+				/toAddRole=perms[user:create]
+				/employeelist=perms[user:employeelist]
+				/toAddRole=perms[user:rolelist]
+				
+				<!-- 请假权限 -->
+				/apply_leave.jsp=perms[leave:apply]
+				/myLeaveBill=perms[leave:billquery]
+				/myTaskList=perms[leave:tasklist]
+				
+				<!-- 报销权限 -->
 				/apply_baoxiao.jsp=perms[baoxiao:apply]
 				/myBaoxiaoBill=perms[baoxiao:billquery]
 				/myTaskList=perms[baoxiao:tasklist]
-				/add_process.jsp=perms[baoxiao:publish]
-				/processDefinitionList=perms[baoxiao:processlist]
-				/findUserList=perms[user:query]
-				/toAddRole=perms[user:create]
+				
+				<!-- 流程权限 -->
+				/add_process.jsp=perms[workflow:publish]
+				/processDefinitionList=perms[workflow:processlist]
+				/delDeploymentxxx=perms[workflow:remove]
+				/viewImage=perms[workflow:viewimage]
+
 				<!-- 配置记住我或认证通过可以访问的地址 -->
 				/main = user
 				/index.jsp = user
