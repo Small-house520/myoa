@@ -20,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web.oa.pojo.ActiveUser;
 import com.web.oa.pojo.BaoxiaoBill;
@@ -57,7 +59,7 @@ public class WorkFlowController {
 
 	// 保存请假信息，开启请假流程
 	@RequestMapping("/saveStartLeave")
-	public String saveStartLeave(Leavebill leaveBill, HttpSession session) {
+	public String saveStartLeave(Leavebill leaveBill, RedirectAttributes redirectAttributes) {
 
 		/**
 		 * 1.将请假业务信息插入到 leavBill表中
@@ -89,11 +91,17 @@ public class WorkFlowController {
 		// this.workFlowService.startProcess(employee.getName());
 		this.workFlowService.startProcess2(leaveBill.getId(), activeUser.getUsername());
 
-		return "redirect:/taskList";
+		// 这种方法相当于在重定向链接地址上追加传递的参数
+		// redirectAttributes.addAttribute("flag", 1);
+
+		// 这种方法是隐藏了参数，链接地址上不直接暴露，
+		// 用(@ModelAttribute(value = "prama")String prama)的方式获取参数。
+		redirectAttributes.addFlashAttribute("flag", 1);
+		return "redirect:/myTaskList";
 	}
 
 	@RequestMapping("/saveStartBaoxiao")
-	public String saveStartBaoxiao(BaoxiaoBill baoxiaoBill, HttpSession session) {
+	public String saveStartBaoxiao(BaoxiaoBill baoxiaoBill, RedirectAttributes redirectAttributes) {
 		// 设置当前时间
 		baoxiaoBill.setCreatdate(new Date());
 		// 设置申请人ID
@@ -107,12 +115,19 @@ public class WorkFlowController {
 
 		workFlowService.saveStartProcess(baoxiaoBill.getId(), activeUser.getUsername());
 
+		// 这种方法相当于在重定向链接地址上追加传递的参数
+		// redirectAttributes.addAttribute("flag", 1);
+
+		// 这种方法是隐藏了参数，链接地址上不直接暴露，
+		// 用(@ModelAttribute(value = "prama")String prama)的方式获取参数。
+		redirectAttributes.addFlashAttribute("flag", 2);
 		return "redirect:/myTaskList";
 	}
 
 	// 根据待办人名称查询请假任务，并跳转到前台显示
 	@RequestMapping("/myTaskList")
-	public ModelAndView getTaskList(int flag, HttpSession session) {
+	// @ModelAttribute("")接收重定向携带的隐藏参数
+	public ModelAndView getTaskList(@ModelAttribute("flag") Integer flag, HttpSession session) {
 		ModelAndView mv = new ModelAndView();
 
 		// 获取session中的employee
@@ -145,6 +160,10 @@ public class WorkFlowController {
 			// 获取报销单信息
 			BaoxiaoBill baoxiaobill = this.workFlowService.findBaoxiaoBillListByTaskId(taskId);
 			map.put("baoxiaoBill", baoxiaobill);
+			// 获取对应身份的审核功能信息
+			List<String> outcomeList = this.workFlowService.findOutComeListByTaskId(taskId);
+
+			map.put("outcomeList", outcomeList);
 		}
 
 		// 获取批注信息
@@ -161,13 +180,19 @@ public class WorkFlowController {
 
 	// 办理任务
 	@RequestMapping("/submitTask")
-	public String submitTask(long id, String taskId, String comment, String outcome, Integer flag) {
+	public String submitTask(long id, String taskId, String comment, String outcome, Integer flag, Model model) {
 		// 获取员工信息
 		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
 		String username = activeUser.getUsername();
 		// 添加批注，且流程需要往前面推进
 		this.workFlowService.saveSubmitTask(id, taskId, comment, outcome, username, flag);
-		return "redirect:/myTaskList";
+
+		model.addAttribute("flag", flag);
+		String uri = "forward:/myLeaveBill";
+		if (flag == 2) {
+			uri = "forward:/myBaoxiaoBill";
+		}
+		return uri;
 	}
 
 	/**

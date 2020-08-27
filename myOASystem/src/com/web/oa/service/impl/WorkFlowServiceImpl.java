@@ -160,7 +160,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 				if (StringUtils.isNotBlank(name)) {
 					list.add(name);
 				} else {
-					list.add("默认提交");
+					list.add("提交");
 				}
 			}
 		}
@@ -243,7 +243,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()// 创建流程定义查询对象，对应表act_re_procdef
 				.processDefinitionId(processDefinitionId)// 使用流程定义ID查询
 				.singleResult();
-		return pd; // TODO Auto-generated method stub
+		return pd;
 	}
 
 	@Override

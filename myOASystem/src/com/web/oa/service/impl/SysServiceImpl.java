@@ -10,12 +10,15 @@ import com.web.oa.mapper.SysPermissionMapper;
 import com.web.oa.mapper.SysPermissionMapperCustom;
 import com.web.oa.mapper.SysRoleMapper;
 import com.web.oa.mapper.SysRolePermissionMapper;
+import com.web.oa.mapper.SysUserRoleMapper;
 import com.web.oa.pojo.MenuTree;
 import com.web.oa.pojo.SysPermission;
 import com.web.oa.pojo.SysPermissionExample;
 import com.web.oa.pojo.SysRole;
 import com.web.oa.pojo.SysRolePermission;
 import com.web.oa.pojo.SysRolePermissionExample;
+import com.web.oa.pojo.SysUserRoleExample;
+import com.web.oa.pojo.SysUserRoleExample.Criteria;
 import com.web.oa.service.SysService;
 
 @Service
@@ -29,6 +32,8 @@ public class SysServiceImpl implements SysService {
 	private SysRolePermissionMapper rolePermissionMapper;
 	@Autowired
 	private SysPermissionMapper sysPermissionMapper;
+	@Autowired
+	private SysUserRoleMapper sysUserRoleMapper;
 
 	@Override
 	public List<SysPermission> findMenuListByUserId(String userid) throws Exception {
@@ -130,6 +135,15 @@ public class SysServiceImpl implements SysService {
 	@Override
 	public void deleteRole(String id) {
 		this.roleMapper.deleteByPrimaryKey(id);
+	}
+
+	// 根据username查询角色id
+	@Override
+	public String findUserandRole(String username) {
+		SysUserRoleExample example = new SysUserRoleExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andSysUserIdEqualTo(username);
+		return this.sysUserRoleMapper.selectByExample(example).get(0).getSysRoleId();
 	}
 
 }

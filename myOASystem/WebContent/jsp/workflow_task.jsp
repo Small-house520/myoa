@@ -68,13 +68,13 @@ th, td {
 												<a
 													href="${pageContext.request.contextPath}/viewTaskForm?taskId=${task.id}&flag=1"
 													class="btn btn-success btn-xs"><span
-													class="glyphicon glyphicon-plus"></span> 办理任务</a>
+													class="glyphicon glyphicon-plus"></span> 办理任务</a>&nbsp;&nbsp;
 											</c:when>
 											<c:otherwise>
 												<a
 													href="${pageContext.request.contextPath}/viewTaskForm?taskId=${task.id}&flag=2"
 													class="btn btn-success btn-xs"><span
-													class="glyphicon glyphicon-plus"></span> 办理任务</a>
+													class="glyphicon glyphicon-plus"></span> 办理任务</a>&nbsp;&nbsp;
 											</c:otherwise>
 										</c:choose> <a
 										href="${pageContext.request.contextPath}/viewCurrentImage?taskId=${task.id}"

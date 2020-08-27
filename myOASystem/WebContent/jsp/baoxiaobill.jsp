@@ -80,7 +80,7 @@ th, td {
 												<a
 													href="${pageContext.request.contextPath }/viewHisComment?id=${bill.id}&flag=2"
 													class="btn btn-success btn-xs"><span
-													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>
+													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>&nbsp;&nbsp;
 												<a
 													href="${pageContext.request.contextPath}/viewCurrentImageByBill?billId=${bill.id}&flag=2"
 													target="_blank" class="btn btn-success btn-xs"><span
@@ -89,7 +89,7 @@ th, td {
 												<a
 													href="${pageContext.request.contextPath }/viewHisComment?id=${bill.id}&flag=2"
 													class="btn btn-success btn-xs"><span
-													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>
+													class="glyphicon glyphicon-eye-open"></span> 审核记录</a>&nbsp;&nbsp;
 												<a href="#" onclick="delConf(${bill.id})"
 													class="btn btn-danger btn-xs"><span
 													class="glyphicon glyphicon-remove"></span> 删除</a>

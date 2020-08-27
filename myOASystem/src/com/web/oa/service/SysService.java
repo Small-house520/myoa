@@ -43,4 +43,6 @@ public interface SysService {
 	public List<SysRole> findRolesAndPermissions();
 
 	public void deleteRole(String id);
+
+	public String findUserandRole(String username);
 }
