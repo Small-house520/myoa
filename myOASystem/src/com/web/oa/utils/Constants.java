@@ -8,7 +8,8 @@ public interface Constants {
 	/**
 	 * 请假流程的key
 	 */
-	public static final String Leave_KEY = "LeaveBillProcess";
+	// public static final String Leave_KEY = "LeaveBillProcess";
+	public static final String Leave_KEY = "leavebill";
 	/**
 	 * 报销流程的key
 	 */

@@ -160,7 +160,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 				if (StringUtils.isNotBlank(name)) {
 					list.add(name);
 				} else {
-					list.add("提交");
+					list.add("同意");
 				}
 			}
 		}
@@ -192,38 +192,33 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		 * 2：如果连线的名称是“默认提交”，那么就不需要设置，如果不是，就需要设置流程变量 在完成任务之前，设置流程变量，按照连线的名称，去完成任务
 		 * 流程变量的名称：outcome 流程变量的值：连线的名称
 		 */
+		// 完成任务
+		Map<String, Object> variables = new HashMap<String, Object>();
+		if (outcome != null && !outcome.equals("同意")) {
+			variables.put("message", outcome);
+			// 3：使用任务ID，完成当前人的个人任务，同时流程变量
+			taskService.complete(taskId, variables);
+		} else {
+			taskService.complete(taskId);
+		}
+
+		// 获取流程实例
+		ProcessInstance processInstance = this.runtimeService.createProcessInstanceQuery()
+				.processInstanceId(processInstanceId)// 使用流程实例ID查询
+				.singleResult();
 
 		if (flag == 1) {
-			// 完成任务
-			taskService.complete(taskId);
-
-			// 获取流程实例
-			ProcessInstance processInstance = this.runtimeService.createProcessInstanceQuery()
-					.processInstanceId(processInstanceId)// 使用流程实例ID查询
-					.singleResult();
-
 			if (processInstance == null) {
 				Leavebill leavebill = leavebillMapper.selectByPrimaryKey(id);
 				leavebill.setState(2);
 				leavebillMapper.updateByPrimaryKey(leavebill);
 			}
 		} else if (flag == 2) {
-			Map<String, Object> variables = new HashMap<String, Object>();
-			if (outcome != null && !outcome.equals("默认提交")) {
-				variables.put("message", outcome);
-				// 3：使用任务ID，完成当前人的个人任务，同时流程变量
-				taskService.complete(taskId, variables);
-			} else {
-				taskService.complete(taskId);
-			}
 			/**
 			 * 5：在完成任务之后，判断流程是否结束 如果流程结束了，更新请假单表的状态从1变成2（审核中-->审核完成）
 			 */
-			ProcessInstance pi = runtimeService.createProcessInstanceQuery()//
-					.processInstanceId(processInstanceId)// 使用流程实例ID查询
-					.singleResult();
 			// 流程结束了
-			if (pi == null) {
+			if (processInstance == null) {
 				// 更新请假单表的状态从1变成2（审核中-->审核完成）
 				BaoxiaoBill bill = baoxiaoBillMapper.selectByPrimaryKey(id);
 				bill.setState(2);
@@ -325,6 +320,21 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		// 定义规则
 		String BUSSINSS_KEY = Constants.Leave_KEY + "." + id;
 		map.put("objId", BUSSINSS_KEY);
+
+		this.runtimeService.startProcessInstanceByKey(Constants.Leave_KEY, BUSSINSS_KEY, map);
+	}
+
+	// 保存并启动请假流程实例
+	@Override
+	public void startProcess3(Long id, String name, int role) {
+		// 请假业务和 流程信息进行关联 BUSSINSS_KEY
+		Map<String, Object> map = new HashMap<>();
+		map.put("userId", name);
+
+		// 定义规则
+		String BUSSINSS_KEY = Constants.Leave_KEY + "." + id;
+		map.put("objId", BUSSINSS_KEY);
+		map.put("role", role);
 
 		this.runtimeService.startProcessInstanceByKey(Constants.Leave_KEY, BUSSINSS_KEY, map);
 	}

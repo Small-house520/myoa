@@ -12,10 +12,11 @@ public class ActiveUser implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private long id;
-	private String userid;// 用户id（主键）
+	private String userid;  // 用户id（主键）
 	private String usercode;// 用户账号
 	private String username;// 用户名称
-	private Long managerId;
+	private int role;		// 用户职位
+	private Long managerId; // 上司id
 
 	private List<SysPermission> menus;// 菜单
 	private List<SysPermission> permissions;// 权限
@@ -83,6 +84,14 @@ public class ActiveUser implements java.io.Serializable {
 
 	public void setManagerId(Long managerId) {
 		this.managerId = managerId;
+	}
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
 	}
 
 }

@@ -87,9 +87,10 @@ public class WorkFlowController {
 		this.leaveBillService.saveLeaveBill(leaveBill);
 
 		// 启动流程(待办人)
-
 		// this.workFlowService.startProcess(employee.getName());
-		this.workFlowService.startProcess2(leaveBill.getId(), activeUser.getUsername());
+		// this.workFlowService.startProcess2(leaveBill.getId(),
+		// activeUser.getUsername());
+		this.workFlowService.startProcess3(leaveBill.getId(), activeUser.getUsername(), activeUser.getRole());
 
 		// 这种方法相当于在重定向链接地址上追加传递的参数
 		// redirectAttributes.addAttribute("flag", 1);
@@ -160,11 +161,15 @@ public class WorkFlowController {
 			// 获取报销单信息
 			BaoxiaoBill baoxiaobill = this.workFlowService.findBaoxiaoBillListByTaskId(taskId);
 			map.put("baoxiaoBill", baoxiaobill);
-			// 获取对应身份的审核功能信息
-			List<String> outcomeList = this.workFlowService.findOutComeListByTaskId(taskId);
 
-			map.put("outcomeList", outcomeList);
 		}
+		// 获取对应身份的审核功能信息
+		List<String> outcomeList = this.workFlowService.findOutComeListByTaskId(taskId);
+		if (outcomeList != null && outcomeList.get(0).contains("请假")) {
+			outcomeList.clear();
+			outcomeList.add("提交");
+		}
+		map.put("outcomeList", outcomeList);
 
 		// 获取批注信息
 		List<Comment> comments = this.workFlowService.findCommentListByTaskId(taskId);

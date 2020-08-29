@@ -62,8 +62,14 @@
 									<textarea class="form-control" rows="8" cols="10" id="comment"
 										name="comment"></textarea>
 								</div>
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<input type="submit" class="btn btn-primary" value="提 交" />
+								</div> -->
+								<div class="form-group">
+									<c:forEach var="outcome" items="${outcomeList}">
+										<input type="submit" name="outcome" class="btn btn-primary"
+											value="${outcome}" />&nbsp;
+									</c:forEach>
 								</div>
 							</div>
 						</div>

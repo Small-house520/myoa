@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -41,10 +41,10 @@
 			<div class="collapse navbar-collapse" id="hard-navbar">
 
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="welcome.jsp?name=${activeUser.username }" class="atip"
-						target="appiframe" data-toggle="tooltip" data-placement="bottom"
-						data-title="首页"><span class="glyphicon glyphicon-home"
-							aria-hidden="true"></span></a></li>
+					<li><a href="welcome.jsp?name=${activeUser.username }"
+						class="atip" target="appiframe" data-toggle="tooltip"
+						data-placement="bottom" data-title="首页"><span
+							class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-expanded="false"> <span
 							class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -101,9 +101,40 @@
 								aria-labelledby="heading${state.index}">
 								<div class="list-group list-group-self">
 									<c:forEach var="subMenu" items="${menu.children}">
-										<a href="${subMenu.url}" target="appiframe"
-											class="list-group-item"><span
-											class="glyphicon glyphicon-menu-right"></span>${subMenu.name}</a>
+										<c:if test="${subMenu.name=='请假申请' }">
+											<shiro:hasPermission name="leave:apply">
+												<a href="${subMenu.url}" target="appiframe"
+													class="list-group-item"><span
+													class="glyphicon glyphicon-menu-right"></span>${subMenu.name}</a>
+											</shiro:hasPermission>
+										</c:if>
+										<c:if test="${subMenu.name=='我的请假单' }">
+											<shiro:hasPermission name="leave:billquery">
+												<a href="${subMenu.url}" target="appiframe"
+													class="list-group-item"><span
+													class="glyphicon glyphicon-menu-right"></span>${subMenu.name}</a>
+											</shiro:hasPermission>
+										</c:if>
+										<c:if test="${subMenu.name=='报销申请' }">
+											<shiro:hasPermission name="baoxiao:apply">
+												<a href="${subMenu.url}" target="appiframe"
+													class="list-group-item"><span
+													class="glyphicon glyphicon-menu-right"></span>${subMenu.name}</a>
+											</shiro:hasPermission>
+										</c:if>
+										<c:if test="${subMenu.name=='我的报销单' }">
+											<shiro:hasPermission name="baoxiao:billquery">
+												<a href="${subMenu.url}" target="appiframe"
+													class="list-group-item"><span
+													class="glyphicon glyphicon-menu-right"></span>${subMenu.name}</a>
+											</shiro:hasPermission>
+										</c:if>
+										<c:if
+											test="${subMenu.name!='请假申请' && subMenu.name!='我的请假单' && subMenu.name!='报销申请' && subMenu.name!='我的报销单' }">
+											<a href="${subMenu.url}" target="appiframe"
+												class="list-group-item"><span
+												class="glyphicon glyphicon-menu-right"></span>${subMenu.name}</a>
+										</c:if>
 									</c:forEach>
 								</div>
 							</div>
@@ -116,8 +147,9 @@
 			<!--内容-->
 			<div id="content" class="main-content">
 
-				<iframe src="welcome.jsp?name=${activeUser.username }" style="width: 100%; height: 100%;"
-					id="appiframe" name="appiframe" frameborder="0"></iframe>
+				<iframe src="welcome.jsp?name=${activeUser.username }"
+					style="width: 100%; height: 100%;" id="appiframe" name="appiframe"
+					frameborder="0"></iframe>
 
 			</div>
 			<!--内容-->
