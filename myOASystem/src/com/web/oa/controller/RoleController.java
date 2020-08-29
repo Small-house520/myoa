@@ -50,7 +50,8 @@ public class RoleController {
 	public Map<String, String> assignRole(String roleId, String userId) {
 		Map<String, String> map = new HashMap<>();
 		try {
-			employeeService.updateEmployeeRole(roleId, userId);
+			employeeService.updateUserRole(roleId, userId);
+			employeeService.updateEmployeeRole(Integer.parseInt(roleId), userId);
 			map.put("msg", "分配权限成功");
 		} catch (Exception e) {
 			e.printStackTrace();

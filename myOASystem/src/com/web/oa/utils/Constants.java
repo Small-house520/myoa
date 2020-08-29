@@ -13,5 +13,6 @@ public interface Constants {
 	/**
 	 * 报销流程的key
 	 */
-	public static final String BAOXIAO_KEY = "baoxiao";
+	// public static final String BAOXIAO_KEY = "baoxiao";
+	public static final String BAOXIAO_KEY = "baoxiaobill";
 }

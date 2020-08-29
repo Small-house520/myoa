@@ -7,18 +7,18 @@ import com.web.oa.pojo.EmployeeCustom;
 
 public interface EmployeeService {
 
-	//根据员工帐号查找员工
+	// 根据员工帐号查找员工
 	Employee findEmployeeByName(String name);
-	
-	//根据主键查找员工
+
+	// 根据主键查找员工
 	Employee findEmployeeManager(long id);
-	
+
 	List<Employee> findUsers();
-	
+
 	List<EmployeeCustom> findUserAndRoleList();
-	
-	void updateEmployeeRole(String roleId,String userId);
-	
+
+	void updateEmployeeRole(Integer roleId, String userId);
+
 	List<Employee> findEmployeeByLevel(int level);
 
 	List<Employee> findEmployeeList();
@@ -32,4 +32,6 @@ public interface EmployeeService {
 	void updateEmployee(Employee employee);
 
 	Employee findEmployeeManagerByManagerId(Long managerId);
+
+	void updateUserRole(String roleId, String userId);
 }

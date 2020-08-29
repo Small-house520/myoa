@@ -58,6 +58,4 @@ public interface WorkFlowService {
 
 	List<Comment> findCommentByLeaveBillId(long id);
 
-	void startProcess3(Long id, String username, int role);
-
 }

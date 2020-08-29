@@ -22,11 +22,13 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.oa.mapper.BaoxiaoBillMapper;
 import com.web.oa.mapper.LeavebillMapper;
+import com.web.oa.pojo.ActiveUser;
 import com.web.oa.pojo.BaoxiaoBill;
 import com.web.oa.pojo.Leavebill;
 import com.web.oa.pojo.LeavebillExample;
@@ -160,7 +162,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 				if (StringUtils.isNotBlank(name)) {
 					list.add(name);
 				} else {
-					list.add("同意");
+					list.add("提交");
 				}
 			}
 		}
@@ -193,8 +195,13 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		 * 流程变量的名称：outcome 流程变量的值：连线的名称
 		 */
 		// 完成任务
+		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
 		Map<String, Object> variables = new HashMap<String, Object>();
-		if (outcome != null && !outcome.equals("同意")) {
+		if (outcome != null && outcome.equals("提交申请")) {
+			variables.put("role", activeUser.getRole());
+			// 3：使用任务ID，完成当前人的个人任务，同时流程变量
+			taskService.complete(taskId, variables);
+		} else if (outcome != null && !outcome.equals("提交")) {
 			variables.put("message", outcome);
 			// 3：使用任务ID，完成当前人的个人任务，同时流程变量
 			taskService.complete(taskId, variables);
@@ -320,21 +327,6 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		// 定义规则
 		String BUSSINSS_KEY = Constants.Leave_KEY + "." + id;
 		map.put("objId", BUSSINSS_KEY);
-
-		this.runtimeService.startProcessInstanceByKey(Constants.Leave_KEY, BUSSINSS_KEY, map);
-	}
-
-	// 保存并启动请假流程实例
-	@Override
-	public void startProcess3(Long id, String name, int role) {
-		// 请假业务和 流程信息进行关联 BUSSINSS_KEY
-		Map<String, Object> map = new HashMap<>();
-		map.put("userId", name);
-
-		// 定义规则
-		String BUSSINSS_KEY = Constants.Leave_KEY + "." + id;
-		map.put("objId", BUSSINSS_KEY);
-		map.put("role", role);
 
 		this.runtimeService.startProcessInstanceByKey(Constants.Leave_KEY, BUSSINSS_KEY, map);
 	}

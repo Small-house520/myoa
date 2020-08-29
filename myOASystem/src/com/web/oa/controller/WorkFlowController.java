@@ -90,7 +90,7 @@ public class WorkFlowController {
 		// this.workFlowService.startProcess(employee.getName());
 		// this.workFlowService.startProcess2(leaveBill.getId(),
 		// activeUser.getUsername());
-		this.workFlowService.startProcess3(leaveBill.getId(), activeUser.getUsername(), activeUser.getRole());
+		this.workFlowService.startProcess2(leaveBill.getId(), activeUser.getUsername());
 
 		// 这种方法相当于在重定向链接地址上追加传递的参数
 		// redirectAttributes.addAttribute("flag", 1);
@@ -165,9 +165,9 @@ public class WorkFlowController {
 		}
 		// 获取对应身份的审核功能信息
 		List<String> outcomeList = this.workFlowService.findOutComeListByTaskId(taskId);
-		if (outcomeList != null && outcomeList.get(0).contains("请假")) {
+		if (outcomeList != null && (outcomeList.get(0).contains("请假") || outcomeList.get(0).contains("报销"))) {
 			outcomeList.clear();
-			outcomeList.add("提交");
+			outcomeList.add("提交申请");
 		}
 		map.put("outcomeList", outcomeList);
 

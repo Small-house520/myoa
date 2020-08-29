@@ -53,8 +53,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return permissionMapper.findUserAndRoleList();
 	}
 
+	// 更新员工表职位
 	@Override
-	public void updateEmployeeRole(String roleId, String userId) {
+	public void updateEmployeeRole(Integer roleId, String userId) {
+		EmployeeExample example = new EmployeeExample();
+		EmployeeExample.Criteria criteria = example.createCriteria();
+		criteria.andNameEqualTo(userId);
+
+		Employee employee = this.employeeMapper.selectByExample(example).get(0);
+		employee.setRole(roleId);
+
+		this.employeeMapper.updateByPrimaryKey(employee);
+	}
+
+	// 更新用户角色表职位
+	@Override
+	public void updateUserRole(String roleId, String userId) {
 		SysUserRoleExample example = new SysUserRoleExample();
 		SysUserRoleExample.Criteria criteria = example.createCriteria();
 		criteria.andSysUserIdEqualTo(userId);

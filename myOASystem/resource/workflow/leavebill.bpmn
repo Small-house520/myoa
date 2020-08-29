@@ -18,11 +18,11 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='同意'}]]></conditionExpression>
     </sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
-    <sequenceFlow id="flow8" name="提交" sourceRef="usertask3" targetRef="endevent1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='提交'}]]></conditionExpression>
+    <sequenceFlow id="flow8" name="审批" sourceRef="usertask3" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message=='审批'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow3" name="部门经理请假" sourceRef="usertask1" targetRef="usertask3">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${role==2||role==4}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${role==2 || role==4}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow2" name="普通员工请假" sourceRef="usertask1" targetRef="usertask2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${role==1}]]></conditionExpression>
@@ -70,7 +70,7 @@
         <omgdi:waypoint x="727.0" y="377.0"></omgdi:waypoint>
         <omgdi:waypoint x="727.0" y="295.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="16.0" width="100.0" x="644.0" y="389.0"></omgdc:Bounds>
+          <omgdc:Bounds height="16.0" width="100.0" x="649.0" y="380.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
