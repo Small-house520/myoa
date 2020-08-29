@@ -28,15 +28,6 @@ public class BaoxiaoBillController {
 	@Autowired
 	private WorkFlowService workFlowService;
 
-	@RequestMapping("/main")
-	public String main(ModelMap model) {
-		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
-		model.addAttribute("activeUser", activeUser);
-
-		return "index";
-
-	}
-
 	// 根据id删除请假单信息
 	@RequestMapping("/baoxiaobilldel")
 	public String baoxiaobilldel(Long id) {

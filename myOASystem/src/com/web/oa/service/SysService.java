@@ -5,6 +5,7 @@ import java.util.List;
 import com.web.oa.pojo.MenuTree;
 import com.web.oa.pojo.SysPermission;
 import com.web.oa.pojo.SysRole;
+import com.web.oa.pojo.SysUserRole;
 
 public interface SysService {
 
@@ -45,4 +46,6 @@ public interface SysService {
 	public void deleteRole(String id);
 
 	public String findUserandRole(String username);
+
+	public void saveUserAndRole(SysUserRole user);
 }

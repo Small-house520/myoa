@@ -17,6 +17,7 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +25,7 @@ import com.web.oa.pojo.ActiveUser;
 import com.web.oa.pojo.Employee;
 import com.web.oa.pojo.EmployeeCustom;
 import com.web.oa.pojo.SysRole;
+import com.web.oa.pojo.SysUserRole;
 import com.web.oa.service.EmployeeService;
 import com.web.oa.service.SysService;
 
@@ -104,6 +106,14 @@ public class UserController {
 		return "login";
 	}
 
+	@RequestMapping("/main")
+	public String main(ModelMap model) {
+		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+		model.addAttribute("activeUser", activeUser);
+
+		return "index";
+	}
+
 	/*
 	 * SELECT e1.*,e2.name FROM employee e1 INNER JOIN employee e2 WHERE
 	 * e1.manager_id=e2.id;
@@ -121,17 +131,17 @@ public class UserController {
 		return mv;
 	}
 
-	// 跳转到添加员工页面
-	@RequestMapping("/employeeadd")
-	public String employeeadd(Model model) {
-		List<Employee> employees = this.employeeService.findEmployeeList();
-		model.addAttribute("employees", employees);
-
-		return "jsp/employeeadd";
-	}
+	// // 跳转到添加员工页面
+	// @RequestMapping("/employeeadd")
+	// public String employeeadd(Model model) {
+	// List<Employee> employees = this.employeeService.findEmployeeList();
+	// model.addAttribute("employees", employees);
+	//
+	// return "jsp/employeeadd";
+	// }
 
 	// 添加员工
-	@RequestMapping("/saveEmployee")
+	@RequestMapping("/saveUser")
 	public String saveEmployee(Employee employee) {
 		// 对密码进行md5加密处理
 		String salt = "eteokues";
@@ -139,7 +149,15 @@ public class UserController {
 		employee.setPassword(md5Hash.toString());
 		employee.setSalt(salt);
 
+		// 保存用户信息
 		this.employeeService.saveEmployee(employee);
+		// 保存用户角色关系
+		SysUserRole user = new SysUserRole();
+		user.setId(employee.getId().toString());
+		user.setSysUserId(employee.getName());
+		user.setSysRoleId(employee.getRole().toString());
+		this.sysService.saveUserAndRole(user);
+
 		return "redirect:/employeelist";
 	}
 

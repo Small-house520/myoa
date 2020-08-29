@@ -36,6 +36,7 @@ th, td {
 		}
 	}
 </script>
+
 </head>
 <body>
 
@@ -134,6 +135,24 @@ th, td {
         pageList: [5,10,20],   	//选择每页显示多少行
         search: true,			//启用关键字搜索框
         sortable: true	 		// 是否启用排序
+        
+        /* columns : [ {
+            title : 'id',
+            field : 'id',
+            sortable : true
+        }, {
+            title : '姓名',
+            field : 'title',
+            sortable : true
+        }, {
+            title : '年龄',
+            field : 'summary',
+            sortable : true
+        },{
+            title : '性别',
+            field : 'cover_img',
+            sortable : true
+        }] */
         
     });
 </script>

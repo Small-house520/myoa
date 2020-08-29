@@ -126,9 +126,13 @@ public class RoleController {
 	@RequestMapping("/findNextManager")
 	@ResponseBody
 	public List<Employee> findNextManager(int level) {
-		level++; // 加一，表示下一个级别
+		if (level < 3) {
+			level++; // 加一，表示下一个级别
+		} else if (level == 4 || level == 3) {
+			level = 3;
+		}
+
 		List<Employee> list = employeeService.findEmployeeByLevel(level);
-		System.out.println(list);
 		return list;
 
 	}

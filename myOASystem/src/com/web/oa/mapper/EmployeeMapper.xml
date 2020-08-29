@@ -108,6 +108,10 @@
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{role}, #{managerId,jdbcType=BIGINT}, 
       #{salt,jdbcType=VARCHAR})
+      <!-- 插入后返回最后插入的id -->
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+    	select last_insert_id() as id
+    </selectKey>
   </insert>
   <insert id="insertSelective" parameterType="com.web.oa.pojo.Employee" >
     insert into employee
@@ -157,6 +161,10 @@
         #{salt,jdbcType=VARCHAR},
       </if>
     </trim>
+    <!-- 插入后返回最后插入的id -->
+    <selectKey resultType="java.lang.Long" keyProperty="id">
+    	select last_insert_id() as id
+    </selectKey>
   </insert>
   <select id="countByExample" parameterType="com.web.oa.pojo.EmployeeExample" resultType="java.lang.Integer" >
     select count(*) from employee

@@ -17,6 +17,7 @@ import com.web.oa.pojo.SysPermissionExample;
 import com.web.oa.pojo.SysRole;
 import com.web.oa.pojo.SysRolePermission;
 import com.web.oa.pojo.SysRolePermissionExample;
+import com.web.oa.pojo.SysUserRole;
 import com.web.oa.pojo.SysUserRoleExample;
 import com.web.oa.pojo.SysUserRoleExample.Criteria;
 import com.web.oa.service.SysService;
@@ -144,6 +145,12 @@ public class SysServiceImpl implements SysService {
 		Criteria criteria = example.createCriteria();
 		criteria.andSysUserIdEqualTo(username);
 		return this.sysUserRoleMapper.selectByExample(example).get(0).getSysRoleId();
+	}
+
+	// 添加用户角色关系
+	@Override
+	public void saveUserAndRole(SysUserRole user) {
+		this.sysUserRoleMapper.insertSelective(user);
 	}
 
 }

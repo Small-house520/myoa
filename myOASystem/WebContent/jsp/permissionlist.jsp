@@ -12,7 +12,7 @@
 <title>流程管理</title>
 
 <!-- Bootstrap -->
-<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/content.css" rel="stylesheet">
 
 <style type="text/css">
@@ -21,8 +21,12 @@ th, td {
 }
 </style>
 
-<script src="js/jquery.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/jquery-2.1.0.js"></script>
+<script src="bootstrap/bootstrap.min.js"></script>
+
+<link href="bootstrap/css/bootstrap-table.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap-table.min.js"></script>
+<script src="bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript">
 	//确认删除函数
 	function delConf(id) {
@@ -47,7 +51,7 @@ th, td {
 		<div class="panel panel-default">
 			<div class="panel-heading">角色列表&nbsp;&nbsp;&nbsp;</div>
 			<div class="table-responsive">
-				<table class="table table-striped table-hover">
+				<table class="table table-striped table-hover" id="tb">
 					<thead>
 						<tr>
 							<th width="30%">角色名称</th>
@@ -147,4 +151,32 @@ th, td {
 			}
 		</script>
 </body>
+
+<script>
+	//实现表格分页
+    $("#tb").bootstrapTable({
+    	//点击行事件,element为被点击行的tr元素对象
+        onClickRow: function (row, $element) {
+            $element.each(function () {
+                //获取所有td的值
+                var tds = $(this).find("td")
+                /* var id = tds.eq(0).text()
+                var title = tds.eq(1).text()
+                var remark = tds.eq(2).text()
+                var money = tds.eq(3).text()
+                var creatdate = tds.eq(4).text()
+                var state = tds.eq(5).text() */
+            })
+        },
+        pageNumber: 1,			//首页页码
+        pagination: true,   	//是否显示分页条
+        pageSize: 5,         	//默认一页显示的行数
+        paginationLoop: false,  //是否开启分页条无限循环，最后一页时点击下一页是否转到第一页
+        pageList: [5,10,20],   	//选择每页显示多少行
+        search: true,			//启用关键字搜索框
+        sortable: true	 		// 是否启用排序
+        
+    });
+</script>
+
 </html>

@@ -281,7 +281,7 @@ public class WorkFlowController {
 	/**
 	 * 删除部署信息
 	 */
-	@RequestMapping("/delDeployment")
+	@RequestMapping("/deploymentdel")
 	public String delDeployment(String deploymentId) {
 		// 使用部署对象ID，删除流程定义
 		workFlowService.deleteProcessDefinitionByDeploymentId(deploymentId);
