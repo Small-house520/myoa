@@ -40,7 +40,7 @@ public class UserController {
 	@Autowired
 	private SysService sysService;
 
-	// 生成验证码
+	// 使用第三方工具包生成验证码
 	@RequestMapping("/checkcode")
 	public void checkcode(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 定义图形验证码的长、宽、验证码字符数、干扰线宽度
@@ -60,6 +60,7 @@ public class UserController {
 		outputStream.close();
 	}
 
+	// 跳转到登录页面
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request, Model model) {
 
@@ -106,8 +107,10 @@ public class UserController {
 		return "login";
 	}
 
+	// 跳转到登录后的首页
 	@RequestMapping("/main")
 	public String main(ModelMap model) {
+		// 获取登录用户相关信息
 		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
 		model.addAttribute("activeUser", activeUser);
 
@@ -115,13 +118,17 @@ public class UserController {
 	}
 
 	/*
+	 * 查询用户和角色信息
+	 * 
 	 * SELECT e1.*,e2.name FROM employee e1 INNER JOIN employee e2 WHERE
 	 * e1.manager_id=e2.id;
 	 */
 	@RequestMapping("/findUserList")
 	public ModelAndView findUserList(String userId) {
 		ModelAndView mv = new ModelAndView();
+		// 查询出所有角色信息
 		List<SysRole> allRoles = sysService.findAllRoles();
+		// 查询出所有用户和角色关系信息
 		List<EmployeeCustom> list = employeeService.findUserAndRoleList();
 
 		mv.addObject("userList", list);
@@ -140,11 +147,11 @@ public class UserController {
 	// return "jsp/employeeadd";
 	// }
 
-	// 添加员工
+	// 添加用户
 	@RequestMapping("/saveUser")
 	public String saveEmployee(Employee employee) {
 		// 对密码进行md5加密处理
-		String salt = "eteokues";
+		String salt = "eteokues"; // 盐
 		Md5Hash md5Hash = new Md5Hash(employee.getPassword(), salt, 2);
 		employee.setPassword(md5Hash.toString());
 		employee.setSalt(salt);
@@ -164,11 +171,12 @@ public class UserController {
 	// 删除员工信息
 	@RequestMapping("/employeedelete")
 	public String employeedelete(Long id) {
+		// 根据员工id删除员工信息
 		this.employeeService.deleteEmployee(id);
 		return "redirect:/employeelist";
 	}
 
-	// 跳转到修改员工页面
+	// 跳转到修改员工信息页面
 	@RequestMapping("/employeeedit")
 	public String employeeedit(Long id, Model model, HttpSession session) {
 		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
@@ -177,8 +185,10 @@ public class UserController {
 		if (id == 0) {
 			id = activeUser.getId();
 		}
+		// 根据id查询出用户信息
 		Employee employee = this.employeeService.findEmployee(id);
 
+		// 查询出所有用户信息
 		List<Employee> employees = this.employeeService.findEmployeeList();
 
 		// 把查询结果传递给model

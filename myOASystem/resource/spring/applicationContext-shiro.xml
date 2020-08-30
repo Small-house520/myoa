@@ -46,6 +46,7 @@
 				/css/**=anon
 				/js/**=anon
 				/static/**=anon
+				<!-- 验证码请求匿名访问 -->
 				/checkcode=anon
 				
 				<!-- 用户权限 -->

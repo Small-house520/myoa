@@ -48,6 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.selectByExample(null);
 	}
 
+	// 查询出所有用户和角色关系信息
 	@Override
 	public List<EmployeeCustom> findUserAndRoleList() {
 		return permissionMapper.findUserAndRoleList();
@@ -90,7 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return list;
 	}
 
-	// 查询员工信息
+	// 查询所有员工信息
 	@Override
 	public List<Employee> findEmployeeList() {
 		return this.employeeMapper.selectByExample(null);

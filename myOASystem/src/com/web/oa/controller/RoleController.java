@@ -31,8 +31,11 @@ public class RoleController {
 
 	@RequestMapping("/toAddRole")
 	public ModelAndView toAddRole() {
+		// 获取树形菜单
 		List<MenuTree> allPermissions = sysService.loadMenuTree();
+		// 获取菜单
 		List<SysPermission> menus = sysService.findAllMenus();
+		// 获取角色和权限关系
 		List<SysRole> permissionList = sysService.findRolesAndPermissions();
 
 		ModelAndView mv = new ModelAndView();
@@ -50,7 +53,9 @@ public class RoleController {
 	public Map<String, String> assignRole(String roleId, String userId) {
 		Map<String, String> map = new HashMap<>();
 		try {
+			// 更新用户角色关系表
 			employeeService.updateUserRole(roleId, userId);
+			// 更新用户表
 			employeeService.updateEmployeeRole(Integer.parseInt(roleId), userId);
 			map.put("msg", "分配权限成功");
 		} catch (Exception e) {
@@ -60,6 +65,7 @@ public class RoleController {
 		return map;
 	}
 
+	// 添加角色和角色权限关系
 	@RequestMapping("/saveRoleAndPermissions")
 	public String saveRoleAndPermissions(SysRole role, int[] permissionIds) {
 		// 设置role主键，使用uuid
@@ -68,11 +74,13 @@ public class RoleController {
 		// 默认可用
 		role.setAvailable("1");
 
+		// 添加角色和角色权限关系
 		sysService.addRoleAndPermissions(role, permissionIds);
 
 		return "redirect:/toAddRole";
 	}
 
+	// 添加权限
 	@RequestMapping("/saveSubmitPermission")
 	public String saveSubmitPermission(SysPermission permission) {
 		if (permission.getAvailable() == null) {
@@ -82,10 +90,13 @@ public class RoleController {
 		return "redirect:/toAddRole";
 	}
 
+	// 查询所有角色及其权限关系
 	@RequestMapping("/findRoles") // rest
 	public ModelAndView findRoles() {
 		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+		// 查询出所有角色信息
 		List<SysRole> roles = sysService.findAllRoles();
+		// 查询所有菜单和权限信息
 		List<MenuTree> allMenuAndPermissions = sysService.getAllMenuAndPermision();
 
 		ModelAndView mv = new ModelAndView();
@@ -97,9 +108,11 @@ public class RoleController {
 		return mv;
 	}
 
+	// 加载我的权限列表
 	@RequestMapping("/loadMyPermissions")
 	@ResponseBody
 	public List<SysPermission> loadMyPermissions(String roleId) {
+		// 根据角色id查询权限信息
 		List<SysPermission> list = sysService.findPermissionsByRoleId(roleId);
 
 		for (SysPermission sysPermission : list) {
@@ -109,12 +122,14 @@ public class RoleController {
 		return list;
 	}
 
+	// 更新角色和权限关系
 	@RequestMapping("/updateRoleAndPermission")
 	public String updateRoleAndPermission(String roleId, int[] permissionIds) {
 		sysService.updateRoleAndPermissions(roleId, permissionIds);
 		return "redirect:/findRoles";
 	}
 
+	// 根据用户名查询角色和权限关系
 	@RequestMapping("/viewPermissionByUser")
 	@ResponseBody
 	public SysRole viewPermissionByUser(String userName) {
@@ -124,15 +139,16 @@ public class RoleController {
 		return sysRole;
 	}
 
+	// 查询上级列表
 	@RequestMapping("/findNextManager")
 	@ResponseBody
 	public List<Employee> findNextManager(int level) {
 		if (level < 3) {
-			level++; // 加一，表示下一个级别
+			level++; // 加一，表示上一个级别
 		} else if (level == 4 || level == 3) {
 			level = 3;
 		}
-
+		// 查询上级列表
 		List<Employee> list = employeeService.findEmployeeByLevel(level);
 		return list;
 

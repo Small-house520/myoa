@@ -26,6 +26,7 @@ public class LeaveBillServiceImpl implements LeaveBillService {
 		this.leaveBillMapper.deleteByPrimaryKey(id);
 	}
 
+	// 根据id查询请假单信息
 	@Override
 	public Leavebill findLeaveBillById(long id) {
 		return this.leaveBillMapper.selectByPrimaryKey(id);

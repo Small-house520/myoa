@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * 树型菜单
+ * 
  * @author gec
  *
  */
@@ -11,8 +12,8 @@ public class TreeMenu {
 
 	private int id;
 	private String name;
-	
-	private List<SysPermission> subMenu;//子菜单
+
+	private List<SysPermission> subMenu;// 子菜单
 
 	public int getId() {
 		return id;
@@ -37,7 +38,5 @@ public class TreeMenu {
 	public void setSubMenu(List<SysPermission> subMenu) {
 		this.subMenu = subMenu;
 	}
-	
-	
-	
+
 }

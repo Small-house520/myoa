@@ -36,21 +36,25 @@ public class SysServiceImpl implements SysService {
 	@Autowired
 	private SysUserRoleMapper sysUserRoleMapper;
 
+	// 查询菜单列表
 	@Override
 	public List<SysPermission> findMenuListByUserId(String userid) throws Exception {
 		return sysPermissionMapperCustom.findMenuListByUserId(userid);
 	}
 
+	// 查询权限列表
 	@Override
 	public List<SysPermission> findPermissionListByUserId(String userid) throws Exception {
 		return sysPermissionMapperCustom.findPermissionListByUserId(userid);
 	}
 
+	// 获取树形菜单
 	@Override
 	public List<MenuTree> loadMenuTree() {
 		return sysPermissionMapperCustom.getMenuTree();
 	}
 
+	// 查询出所有角色信息
 	@Override
 	public List<SysRole> findAllRoles() {
 		return roleMapper.selectByExample(null);
@@ -62,6 +66,7 @@ public class SysServiceImpl implements SysService {
 		return sysPermissionMapperCustom.findRoleAndPermissionListByUserId(userId);
 	}
 
+	// 添加角色和角色权限关系
 	@Override
 	public void addRoleAndPermissions(SysRole role, int[] permissionIds) {
 		// 添加角色
@@ -78,6 +83,7 @@ public class SysServiceImpl implements SysService {
 		}
 	}
 
+	// 获取菜单
 	@Override
 	public List<SysPermission> findAllMenus() {
 		SysPermissionExample example = new SysPermissionExample();
@@ -87,26 +93,31 @@ public class SysServiceImpl implements SysService {
 		return sysPermissionMapper.selectByExample(example);
 	}
 
+	// 添加权限
 	@Override
 	public void addSysPermission(SysPermission permission) {
 		sysPermissionMapper.insert(permission);
 	}
 
+	// 查询菜单和权限信息
 	@Override
 	public List<SysPermission> findMenuAndPermissionByUserId(String userId) {
 		return sysPermissionMapperCustom.findMenuAndPermissionByUserId(userId);
 	}
 
+	// 查询所有菜单和权限信息
 	@Override
 	public List<MenuTree> getAllMenuAndPermision() {
 		return sysPermissionMapperCustom.getAllMenuAndPermision();
 	}
 
+	// 根据角色id查询权限信息
 	@Override
 	public List<SysPermission> findPermissionsByRoleId(String roleId) {
 		return sysPermissionMapperCustom.findPermissionsByRoleId(roleId);
 	}
 
+	// 更新角色和权限关系
 	@Override
 	public void updateRoleAndPermissions(String roleId, int[] permissionIds) {
 		// 先删除角色权限关系表中角色的权限关系

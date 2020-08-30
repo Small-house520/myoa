@@ -42,15 +42,6 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
 		return super.onAccessDenied(request, response);
 	}
 
-	// @Override
-	// protected boolean onAccessDenied(ServletRequest request, ServletResponse
-	// response) throws Exception {
-	// if (request.getAttribute(getFailureKeyAttribute()) != null) {
-	// return true;
-	// }
-	// return super.onAccessDenied(request, response);
-	// }
-
 	// 验证成功后，设置重定向的位置
 	@Override
 	protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,

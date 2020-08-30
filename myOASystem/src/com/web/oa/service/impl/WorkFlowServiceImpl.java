@@ -69,6 +69,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		}
 	}
 
+	// 查询部署对象信息
 	@Override
 	public List<Deployment> findDeploymentList() {
 		List<Deployment> list = repositoryService.createDeploymentQuery()// 创建部署对象查询
@@ -76,6 +77,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		return list;
 	}
 
+	// 查询流程定义的信息
 	@Override
 	public List<ProcessDefinition> findProcessDefinitionList() {
 		List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery()// 创建流程定义查询
@@ -83,6 +85,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		return list;
 	}
 
+	// 保存并启动报销流程实例
 	@Override
 	public void saveStartProcess(long baoxiaoId, String username) {
 		// 使用当前对象获取到流程定义的key（对象的名称就是流程定义的key）
@@ -133,6 +136,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		return list;
 	}
 
+	// 获取对应身份的审核功能信息
 	@Override
 	public List<String> findOutComeListByTaskId(String taskId) {
 		// 返回存放连线的名称集合
@@ -169,6 +173,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		return list;
 	}
 
+	// 完成任务，推进流程
 	@Override
 	public void saveSubmitTask(long id, String taskId, String comment, String outcome, String username, int flag) {
 		/**
@@ -197,6 +202,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		// 完成任务
 		ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
 		Map<String, Object> variables = new HashMap<String, Object>();
+		// 判断完成流程是否需要对应参数
 		if (outcome != null && outcome.equals("提交申请")) {
 			variables.put("role", activeUser.getRole());
 			// 3：使用任务ID，完成当前人的个人任务，同时流程变量
@@ -216,6 +222,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 
 		if (flag == 1) {
 			if (processInstance == null) {
+				// 把请假审核状态更新为已完成
 				Leavebill leavebill = leavebillMapper.selectByPrimaryKey(id);
 				leavebill.setState(2);
 				leavebillMapper.updateByPrimaryKey(leavebill);
@@ -226,7 +233,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 			 */
 			// 流程结束了
 			if (processInstance == null) {
-				// 更新请假单表的状态从1变成2（审核中-->审核完成）
+				// 更新报销单表的状态从1变成2（审核中-->审核完成）
 				BaoxiaoBill bill = baoxiaoBillMapper.selectByPrimaryKey(id);
 				bill.setState(2);
 				baoxiaoBillMapper.updateByPrimaryKey(bill);
@@ -235,6 +242,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 
 	}
 
+	// 根据任务id查询流程定义对象
 	@Override
 	public ProcessDefinition findProcessDefinitionByTaskId(String taskId) {
 		// 使用任务ID，查询任务对象
@@ -248,6 +256,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		return pd;
 	}
 
+	// 勾画出当前流程坐标信息图
 	@Override
 	public Map<String, Object> findCoordingByTask(String taskId) {
 		// 存放坐标
@@ -285,6 +294,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		return repositoryService.getResourceAsStream(deploymentId, imageName);
 	}
 
+	// 根据BUSSINESS_KEY查询任务信息
 	@Override
 	public Task findTaskByBussinessKey(String bUSSINESS_KEY) {
 		Task task = this.taskService.createTaskQuery().processInstanceBusinessKey(bUSSINESS_KEY).singleResult();
@@ -295,13 +305,16 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 	@Override
 	public List<Comment> findCommentByBaoxiaoBillId(long id) {
 		String bussiness_key = Constants.BAOXIAO_KEY + "." + id;
+		// 根据bussiness_key获取历史流程实例信息
 		HistoricProcessInstance pi = this.historyService.createHistoricProcessInstanceQuery()
 				.processInstanceBusinessKey(bussiness_key).singleResult();
+		// 根据报销单ID查询历史批注
 		List<Comment> commentList = this.taskService.getProcessInstanceComments(pi.getId());
 
 		return commentList;
 	}
 
+	// 根据部署id删除流程定义
 	@Override
 	public void deleteProcessDefinitionByDeploymentId(String deploymentId) {
 		this.repositoryService.deleteDeployment(deploymentId, true);
@@ -317,7 +330,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		return list;
 	}
 
-	// 保存并启动流程实例
+	// 保存并启动请假流程实例
 	@Override
 	public void startProcess2(Long id, String name) {
 		// 请假业务和 流程信息进行关联 BUSSINSS_KEY
@@ -328,6 +341,7 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		String BUSSINSS_KEY = Constants.Leave_KEY + "." + id;
 		map.put("objId", BUSSINSS_KEY);
 
+		// 启动流程实例
 		this.runtimeService.startProcessInstanceByKey(Constants.Leave_KEY, BUSSINSS_KEY, map);
 	}
 
@@ -338,10 +352,12 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 		if (flag == 1) {
 			procDeResName = Constants.Leave_KEY;
 		}
+		// 获得流程定义
 		ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery()
 				.processDefinitionResourceNameLike("%" + procDeResName + "%").singleResult();
 		if (processDefinition != null) {
 			String id = processDefinition.getId();
+			// 根据待办人名称查询任务
 			List<Task> list = this.taskService.createTaskQuery().taskAssignee(name).processDefinitionId(id)
 					.orderByTaskCreateTime().desc().list();
 			return list;
@@ -415,8 +431,10 @@ public class WorkFlowServiceImpl implements WorkFlowService {
 	@Override
 	public List<Comment> findCommentByLeaveBillId(long id) {
 		String bussiness_key = Constants.Leave_KEY + "." + id;
+		// 根据bussiness_key获取历史流程实例
 		HistoricProcessInstance pi = this.historyService.createHistoricProcessInstanceQuery()
 				.processInstanceBusinessKey(bussiness_key).singleResult();
+		// 根据请假单ID查询历史批注
 		List<Comment> commentList = this.taskService.getProcessInstanceComments(pi.getId());
 
 		return commentList;

@@ -52,6 +52,7 @@ public class BaoxiaoBillController {
 		return "jsp/baoxiaobill";
 	}
 
+	// 显示当前流程图的位置
 	@RequestMapping("/viewCurrentImageByBill")
 	public String viewCurrentImageByBill(long billId, int flag, ModelMap model) {
 		String BUSSINESS_KEY = null;
@@ -61,6 +62,7 @@ public class BaoxiaoBillController {
 			BUSSINESS_KEY = Constants.BAOXIAO_KEY + "." + billId;
 		}
 
+		// 根据BUSSINESS_KEY查询出任务信息
 		Task task = this.workFlowService.findTaskByBussinessKey(BUSSINESS_KEY);
 		/** 一：查看流程图 */
 		// 1：获取任务ID，获取任务对象，使用任务对象获取流程定义ID，查询流程定义对象

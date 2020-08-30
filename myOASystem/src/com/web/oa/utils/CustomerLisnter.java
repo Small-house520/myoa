@@ -10,6 +10,13 @@ import com.web.oa.pojo.ActiveUser;
 import com.web.oa.pojo.Employee;
 import com.web.oa.service.EmployeeService;
 
+/**
+ * 自定义监听器，分配待办人
+ * 
+ * @author 小房子
+ * @date Aug 30, 2020
+ *
+ */
 public class CustomerLisnter implements TaskListener {
 
 	private static final long serialVersionUID = 1L;

@@ -112,7 +112,7 @@ th, td {
 </body>
 
 <script>
-	//实现表格分页
+	// bootstrap-table实现表格分页
     $("#tb").bootstrapTable({
     	//点击行事件,element为被点击行的tr元素对象
         onClickRow: function (row, $element) {
@@ -131,7 +131,7 @@ th, td {
         pagination: true,   	//是否显示分页条
         pageSize: 10,         	//默认一页显示的行数
         paginationLoop: false,  //是否开启分页条无限循环，最后一页时点击下一页是否转到第一页
-        pageList: [10,15,20],   	//选择每页显示多少行
+        pageList: [10,15,20],   //选择每页显示多少行
         search: true,			//启用关键字搜索框
         sortable: true	 		// 是否启用排序
         

@@ -16,6 +16,7 @@ public class BaoxiaoServcieImpl implements BaoxiaoService {
 	@Autowired
 	private BaoxiaoBillMapper baoxiaoBillMapper;
 
+	// 查询报销单列表
 	@Override
 	public List<BaoxiaoBill> findBaoxiaoBillListByUser(Long userid) {
 		BaoxiaoBillExample example = new BaoxiaoBillExample();
@@ -24,6 +25,7 @@ public class BaoxiaoServcieImpl implements BaoxiaoService {
 		return baoxiaoBillMapper.selectByExample(example);
 	}
 
+	// 保存报销单信息
 	@Override
 	public void saveBaoxiao(BaoxiaoBill baoxiaoBill) {
 		// 获取请假单ID
@@ -43,17 +45,20 @@ public class BaoxiaoServcieImpl implements BaoxiaoService {
 
 	}
 
+	// 根据id查询出报销单信息
 	@Override
 	public BaoxiaoBill findBaoxiaoBillById(Long id) {
 		BaoxiaoBill bill = baoxiaoBillMapper.selectByPrimaryKey(id);
 		return bill;
 	}
 
+	// 根据id删除报销单信息
 	@Override
 	public void deleteBaoxiaoBillById(Long id) {
 		baoxiaoBillMapper.deleteByPrimaryKey(id);
 	}
 
+	// 根据id查询报销单信息
 	@Override
 	public List<BaoxiaoBill> findLeaveBillListByUser(Long id) {
 		BaoxiaoBillExample example = new BaoxiaoBillExample();

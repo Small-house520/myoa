@@ -121,8 +121,8 @@ body {
 					<div class="form-group">
 
 						<div class="main-checkbox">
-							<input type="checkbox" name="rememberMe" id="checkbox1" /> <label
-								for="checkbox1"></label>
+							<input type="checkbox" checked="checked" name="rememberMe"
+								id="checkbox1" /> <label for="checkbox1"></label>
 						</div>
 
 						<span class="text">自动登录</span>
