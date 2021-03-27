@@ -18,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web.oa.pojo.ActiveUser;
 import com.web.oa.pojo.Employee;
@@ -64,6 +66,9 @@ public class UserController {
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request, Model model) {
 
+		/*Md5Hash md5 = new Md5Hash("666666","eteokues",2);
+		System.out.println(md5);*/
+		
 		// // 获取cookie
 		// Cookie[] cookies = request.getCookies();
 		// // 如果cookie不为空
@@ -124,7 +129,7 @@ public class UserController {
 	 * e1.manager_id=e2.id;
 	 */
 	@RequestMapping("/findUserList")
-	public ModelAndView findUserList(String userId) {
+	public ModelAndView findUserList(String userId, @ModelAttribute("errorMsg") String errorMsg) {
 		ModelAndView mv = new ModelAndView();
 		// 查询出所有角色信息
 		List<SysRole> allRoles = sysService.findAllRoles();
@@ -133,6 +138,7 @@ public class UserController {
 
 		mv.addObject("userList", list);
 		mv.addObject("allRoles", allRoles);
+		mv.addObject("errorMsg", errorMsg);
 
 		mv.setViewName("jsp/userlist");
 		return mv;
@@ -149,7 +155,12 @@ public class UserController {
 
 	// 添加用户
 	@RequestMapping("/saveUser")
-	public String saveEmployee(Employee employee) {
+	public String saveEmployee(Employee employee, RedirectAttributes redirectAttributes) {
+		if (this.employeeService.findEmployeeByName(employee.getName()) != null) {
+			redirectAttributes.addFlashAttribute("errorMsg", "用户名已存在，请重新输入");
+			return "redirect:/findUserList";
+		}
+
 		// 对密码进行md5加密处理
 		String salt = "eteokues"; // 盐
 		Md5Hash md5Hash = new Md5Hash(employee.getPassword(), salt, 2);

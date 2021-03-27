@@ -48,4 +48,6 @@ public interface SysService {
 	public String findUserandRole(String username);
 
 	public void saveUserAndRole(SysUserRole user);
+
+	public String findLastId();
 }

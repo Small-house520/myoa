@@ -35,7 +35,7 @@
 				<div class="panel-heading">添加角色</div>
 				<div class="panel-body">
 					<div class="form-group">
-						<label for="name">角色名称 </label> <input type="text"
+						<label for="name">角色名称 </label> <input type="text" required
 							class="form-control" id="roleName" name="name" placeholder="">
 						<button type="submit" class="btn btn-primary">保存角色和权限</button>
 					</div>
@@ -92,7 +92,7 @@
 						<table class="table table-bordered table-striped" width="800px">
 							<tr>
 								<td>名称</td>
-								<td><input class="form-control" name="name"
+								<td><input class="form-control" name="name" required
 									placeholder="名称"></td>
 							</tr>
 							<tr>

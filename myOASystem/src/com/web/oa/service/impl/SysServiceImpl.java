@@ -72,15 +72,18 @@ public class SysServiceImpl implements SysService {
 		// 添加角色
 		roleMapper.insert(role);
 		// 添加角色和权限关系表
-		for (int i = 0; i < permissionIds.length; i++) {
-			SysRolePermission rolePermission = new SysRolePermission();
-			// 16进制随机码
-			String uuid = UUID.randomUUID().toString();
-			rolePermission.setId(uuid);
-			rolePermission.setSysRoleId(role.getId());
-			rolePermission.setSysPermissionId(permissionIds[i] + "");
-			rolePermissionMapper.insert(rolePermission);
+		if (permissionIds != null) {
+			for (int i = 0; i < permissionIds.length; i++) {
+				SysRolePermission rolePermission = new SysRolePermission();
+				// 16进制随机码
+				String uuid = UUID.randomUUID().toString();
+				rolePermission.setId(uuid);
+				rolePermission.setSysRoleId(role.getId());
+				rolePermission.setSysPermissionId(permissionIds[i] + "");
+				rolePermissionMapper.insert(rolePermission);
+			}
 		}
+
 	}
 
 	// 获取菜单
@@ -162,6 +165,11 @@ public class SysServiceImpl implements SysService {
 	@Override
 	public void saveUserAndRole(SysUserRole user) {
 		this.sysUserRoleMapper.insertSelective(user);
+	}
+
+	@Override
+	public String findLastId() {
+		return this.roleMapper.selectLastId();
 	}
 
 }

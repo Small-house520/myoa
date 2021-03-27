@@ -45,6 +45,7 @@ th, td {
 					用户列表&nbsp;&nbsp;&nbsp;
 					<button type="button" class="btn btn-primary" title="新建"
 						data-toggle="modal" data-target="#createUserModal">新建用户</button>
+					&nbsp;&nbsp;&nbsp;<span style="color: red;">${errorMsg }</span>
 				</div>
 
 				<div class="table-responsive">
@@ -102,12 +103,12 @@ th, td {
 						<table class="table table-bordered table-striped" width="800px">
 							<tr>
 								<td>用户名</td>
-								<td><input class="form-control" name="name"
+								<td><input class="form-control" name="name" required
 									placeholder="请输入用户名"></td>
 							</tr>
 							<tr>
 								<td>密码</td>
-								<td><input class="form-control" type="password"
+								<td><input class="form-control" type="password" required
 									name="password" placeholder="请输入密码"></td>
 							</tr>
 							<tr>

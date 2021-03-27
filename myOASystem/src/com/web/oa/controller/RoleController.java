@@ -3,7 +3,6 @@ package com.web.oa.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +67,14 @@ public class RoleController {
 	// 添加角色和角色权限关系
 	@RequestMapping("/saveRoleAndPermissions")
 	public String saveRoleAndPermissions(SysRole role, int[] permissionIds) {
-		// 设置role主键，使用uuid
-		String uuid = UUID.randomUUID().toString();
-		role.setId(uuid);
+		String id = this.sysService.findLastId();
+		// 设置role主键，查询出最后一条记录的id，然后加一
+		id = String.valueOf(Integer.parseInt(id) + 1);
+		role.setId(id);
+
+		// // 设置role主键，使用uuid
+		// String uuid = UUID.randomUUID().toString();
+		// role.setId(uuid);
 		// 默认可用
 		role.setAvailable("1");
 

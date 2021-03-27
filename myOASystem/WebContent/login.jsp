@@ -133,7 +133,7 @@ body {
 						</div>
 					</div>
 				</form>
-				<div id="f">Copyright © 2020 August by JAVA课程-小房子</div>
+				<div id="f">Copyright © 2020 8 by JAVA-小房子</div>
 			</div>
 		</div>
 	</div>
